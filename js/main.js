@@ -1,6 +1,9 @@
 // Function to convert date objects to strings or reverse
 let dateFormatter = d3.timeFormat("%Y-%m-%d");
 let dateParser = d3.timeParse("%m/%d/%Y");
+let artistProfileName = document.getElementById("artist-profile-name");
+let topTenArtists = [];
+let artistProfile;
 
 
 // (1) Load data with promises
@@ -52,7 +55,14 @@ function createVis(data) {
 
 
     // (4) Create visualization instances
-    let saraVis = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
+    let saraBarChart = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
+    artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, billboard, audio);
     // let sahanaVis = new SahanaVis("sahana-id-name", hotStuff, billboard, audio);
     // let yijiangViz = new YijiangVis("yijiang-id-name", hotStuff, billboard, audio);
+}
+
+function displayArtistProfile(){
+    // update artist profile visualization
+    // artistProfile.wrangleData();
+
 }

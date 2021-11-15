@@ -27,11 +27,16 @@ class SaraBarChartVis {
 			.append("g")
 			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
+        vis.x = d3.scaleLinear()
+            .range([0, vis.width - 20]);
+
         vis.y = d3.scaleBand()
-            .range([vis.height, 0]);
+            .range([vis.padding.top, vis.height/1.3])
+            .paddingInner(0.8);
 
         vis.yAxis = d3.axisLeft()
-            .scale(vis.y);
+            .scale(vis.y)
+            .tickSize(0);
 
         vis.svg.append("g")
             .attr("class", "y-axis axis")
@@ -42,13 +47,96 @@ class SaraBarChartVis {
 
     wrangleData(){
         let vis = this;
+        vis.displayData = [];
+        vis.artistSongs = new Map();
+        vis.songRank = new Map();
 
         vis.hotStuff.forEach(d => {
             if(d.Year === 2000){ // change when you can adjust year
+                let points = 0;
+                if(vis.songRank.has(d.Song)){
+                    points = vis.songRank.get(d.Song);
+                }
+                else {
+                    let arr = [];
+                    if (vis.artistSongs.has(d.Performer)){
+                        arr = vis.artistSongs.get(d.Performer);
+                    }
+                    arr.push(d.Song);
+                    vis.artistSongs.set(d.Performer, arr);
+
+                }
+                points += 100 - d["Week Position"];
+                vis.songRank.set(d.Song, points);
             }
         })
 
+        console.log(vis.artistSongs);
+        console.log(vis.songRank);
+
+        // iterate through artists to find their total rank
+        // in the year weighted by ranking of their popular songs
+        for(let artist of vis.artistSongs.keys()){
+            let totalRank = 0;
+
+            // iterate through each song
+            vis.artistSongs.get(artist).forEach(song => {
+                totalRank += vis.songRank.get(song);
+            })
+            vis.displayData.push({artist, totalRank});
+        }
+
+        vis.displayData = vis.displayData.sort((a,b) => {
+            return b.totalRank - a.totalRank;
+        })
+
+        //console.log(vis.displayData);
+
+        vis.updateVis();
+    }
+
+    updateVis(){
+        let vis = this;
+
+        vis.displayData = vis.displayData.slice(0,10);
+
+        vis.displayData.forEach(d => {
+            let artist = d.artist;
+            let songs = vis.artistSongs.get(artist);
+            songs = songs.sort((a,b) => {
+                return vis.songRank.get(b)-vis.songRank.get(a);
+            })
+            topTenArtists.push({artist, songs});
+        })
+
+        vis.y.domain(vis.displayData.map(d => d.artist));
+        vis.x.domain([0, d3.max(vis.displayData, d=> d.totalRank)]);
+        console.log(vis.x.domain());
+
+        let rect = vis.svg.selectAll("rect")
+            .data(vis.displayData);
+
+        rect.enter().append("rect")
+            .attr("class", "bars")
+            .merge(rect)
+            .attr("x", 20)
+            .attr("y", d => vis.y(d.artist))
+            .attr("rx", 6)
+            .attr("width", d => vis.x(d.totalRank))
+            .attr("height", vis.y.bandwidth())
+            .attr("fill", "#fec5bb");
+
+        rect.exit().remove();
+
+        // Update the y-axis
+        vis.svg.select(".y-axis").call(vis.yAxis);
+        d3.selectAll(".tick text")
+            .on("click", function(event, d) {
+                artistProfileName.innerHTML = d;
+                displayArtistProfile();
+            });
 
     }
 
 }
+
