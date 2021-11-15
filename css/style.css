@@ -1,0 +1,21 @@
+
+
+/***** SARA'S CSS ******/
+
+.sara-col {
+    height: 80vh;
+    margin: 1% 1% 0% 1%;
+    background-color: antiquewhite;
+    width: 100%;
+}
+
+#bar-chart-title, #artist-profile{
+    padding-top: 3%;
+    padding-left: 1%;
+    height: 5vh;
+}
+
+#bar-chart {
+    height: 72vh;
+}
+

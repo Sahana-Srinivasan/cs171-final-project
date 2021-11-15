@@ -1,6 +1,9 @@
 // Function to convert date objects to strings or reverse
 let dateFormatter = d3.timeFormat("%Y-%m-%d");
 let dateParser = d3.timeParse("%m/%d/%Y");
+let artistProfileName = document.getElementById("artist-profile-name");
+let topTenArtists = [];
+let artistProfile;
 
 
 // (1) Load data with promises
@@ -52,7 +55,15 @@ function createVis(data) {
 
 
     // IMPORTANT NOTE: Currently, for anything to work, only uncomment on person's viz'es at a time
-    //let saraVis = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
-    let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
+    // aka just the sahana viz or just yijiang or just saraBarChar+artistProfile
+    let saraBarChart = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
+    artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, billboard, audio);
+    // let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
     // let yijiangViz = new YijiangVis("yijiang-id-name", hotStuff, billboard, audio);
+}
+
+function displayArtistProfile(){
+    // update artist profile visualization
+    // artistProfile.wrangleData();
+
 }
