@@ -139,36 +139,100 @@ class SahanaVis {
                 attrWideMin = localMin;
             }
         })
+        attrWideMax = 100;
+        attrWideMin = -10;
 
         vis.y.domain([attrWideMin, attrWideMax]);
 
         // bind line to data
-        var line = vis.svg.selectAll(".line")
-		    .data([vis.weeklyList]);
+        // var linegraph = vis.svg.selectAll(".line")
+        //             .attr("class","line")
+            //.data([vis.weeklyList]);
+    
+        var linegraph = vis.svg.append("path")
+        .attr("class", "line");
+            
+        console.log("right before the line");
+        console.log([vis.weeklyList]);
 
-        // line update - NOT SHOWING UP (NAN somwhere??)
-        line
-            .enter()
-            .append("path")
-            .attr("class","line")
-            .merge(line)
-            .attr("d", d3.line()
-                .x(function(d) { 
-                    if (!isNaN(d.acousticness)) {
-                        console.log(vis.parseDate(d.date))
-                        console.log(vis.x(vis.parseDate((d.date))))
-                        return vis.x(vis.parseDate(d.date)); 
+        vis.filtered_data = vis.weeklyList.filter( (value, index) => {
+            return !isNaN(value.acousticness)
+        });
+
+        vis.filtered_data.sort(function(x, y){
+            return d3.ascending(vis.parseDate(x.date), vis.parseDate(y.date));
+         })
+
+        var line = d3.line()
+                .x(function(d, index) { 
+                    if (index < 3279) {
+                        if (isNaN(d)) {
+                            console.log("d not exist", d);
+                        }
+                        console.log(d);
+                        console.log("in the line attr")
+                        if (!isNaN(d.acousticness)) {
+                            console.log(vis.parseDate(d.date))
+                            console.log(vis.x(vis.parseDate((d.date))))
+                            return vis.x(vis.parseDate(d.date)); 
+                        }
+                        else {
+                            return 0;
+                        }
+                    }
+                    
+                })
+                .y(function(d, index) {
+                    if (index < 3279) {
+                        if (!isNaN(d.acousticness)) {
+                            console.log(vis.y(d.acousticness));
+                            return vis.y(d.acousticness); 
+                        }
+                        else {
+                            return 0;
+                        }
                     }
                 })
-                .y(function(d) {
-                    if (!isNaN(d.acousticness)) {
-                        console.log(vis.y(d.acousticness));
-                        return vis.y(d.acousticness); 
-                    }
-                }))
-            //("none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 2.5);
+                .curve(d3.curveLinear);
+
+        linegraph.attr("d", line(vis.filtered_data))
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2.5)
+                .attr("fill", "none");
+
+        // line update - NOT SHOWING UP (NAN somwhere??)
+        // line
+        //     .enter()
+        //     .append("path")
+        //     //.attr("class","line")
+        //     .merge(line)
+        //     .attr("d", d3.line()
+        //         .x(function(d, index) { 
+        //             if (index < 3279) {
+        //                 if (isNaN(d)) {
+        //                     console.log("d not exist", index);
+        //                 }
+        //                 console.log(d);
+        //                 console.log("in the line attr")
+        //                 if (!isNaN(d.acousticness)) {
+        //                     console.log(vis.parseDate(d.date))
+        //                     console.log(vis.x(vis.parseDate((d.date))))
+        //                     return vis.x(vis.parseDate(d.date)); 
+        //                 }
+        //             }
+                    
+        //         })
+        //         .y(function(d, index) {
+        //             if (index < 3279) {
+        //                 if (!isNaN(d.acousticness)) {
+        //                     console.log(vis.y(d.acousticness));
+        //                     return vis.y(d.acousticness); 
+        //                 }
+        //             }
+        //         }))
+        //     //("none")
+        //     .attr("stroke", "steelblue")
+        //     .attr("stroke-width", 2.5);
 
         // axes
         vis.svg.select(".y-axis")
