@@ -51,12 +51,8 @@ function createVis(data) {
     let billboard = data[1]
     let audio = data[2]
 
-    // IMPORTANT NOTE: Currently, for anything to work, only uncomment on person's viz'es at a time
-    // aka just the sahana viz or just yijiang or just saraBarChar+artistProfile
     let saraBarChart = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
     artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, billboard, audio);
-    // let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
-    // let yijiangViz = new YijiangVis("yijiang-id-name", hotStuff, billboard, audio);
 
 }
 
