@@ -51,8 +51,8 @@ function createVis(data) {
     console.log(data);
 
 
-    // (4) Create visualization instances
-    let saraVis = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
-    // let sahanaVis = new SahanaVis("sahana-id-name", hotStuff, billboard, audio);
+    // IMPORTANT NOTE: Currently, for anything to work, only uncomment on person's viz'es at a time
+    //let saraVis = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
+    let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
     // let yijiangViz = new YijiangVis("yijiang-id-name", hotStuff, billboard, audio);
 }
