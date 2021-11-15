@@ -48,7 +48,45 @@
           </nav>
     </div>
 
-    This is Yijiang's page.
+    <!-- HEADING -->
+    <div class="row d-flex justify-content-center"
+         style="height: 10vh; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
+        <div class="align-self-center" style="margin-left: 0; padding-left: 0;">
+            <h1>What makes a hit in the 2000s?</h1>
+        </div>
+    </div>
+
+<!--    justify-content-center -->
+    <div class="row " id="selectDiv">
+        Sorting by the  <select id='categorySelector' class="custom-select align-self-center" style="width: 18vw; margin-left: 1vw; padding-right: 0" onchange="categoryChange()">
+            <option value="numberOneHits" selected>number of #1 hits</option>
+            <option value="numberTenHits">number of Top 10 hits</option>
+            <option value="numberHundredHits">number of Top 100 hits</option>
+
+        </select>
+    </div>
+
+    <!-- Visualizations -->
+    <div class="row justify-content-center align-items-center" style="width:73vh;  height: 73vh;">
+        <div class="col justify-content-center align-items-center" style="width:36vh;  height: 73vh;">
+            <div class="justify-content-center align-self-center align-items-center" id="genreVis"></div>
+
+        </div>
+
+        <div class="col justify-content-center align-items-center" style="width:36vh;  height: 73vh;">
+            <div class="justify-content-center align-self-center align-items-center" id="attrVis">
+                A row of rectangles with fill from the bottom to the top of the average of each attribute, e.g. danceability, energy, etc.
+            </div>
+        </div>
+
+    </div>
+    <div class="row justify-content-center align-items-center" style="width:73vh;  height: 73vh;">
+        <div class="justify-content-center align-self-center align-items-center" id="matrixVis">
+            A heatmap of two selected attributes and the frequency of having a certain range of
+            (energy and danceability, for example) among the number 1 hits.
+        </div>
+
+    </div>
 
 </div>
 
@@ -63,10 +101,11 @@
 
 <!-- Visualization objects -->
 <script src="js/sahanaVis.js"></script>
-<script src="js/saraVis.js"></script>
-<script src="js/yijiangVis.js"></script>
+<script src="js/saraBarChartVis.js"></script>
+<script src="js/yijiangMatrixVis.js"></script>
+<script src="js/yijiangGenreVis.js"></script>
 
 <!-- Load data, create visualizations -->
-<script src="js/main.js"></script>
+<script src="js/yijiangVis.js"></script>
 </body>
 </html>
