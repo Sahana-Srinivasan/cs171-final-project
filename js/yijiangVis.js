@@ -2,6 +2,9 @@
 dateFormatter = d3.timeFormat("%Y-%m-%d");
 dateParser = d3.timeParse("%m/%d/%Y");
 
+//
+let colors = ["#B98B73", "#CB997E", "#DDBEA9", "#FFE8D6",
+              "#D4C7B0", "#A5A58D", "#6B705C" ,"#3F4238"]
 
 // (1) Load data with promises
 
