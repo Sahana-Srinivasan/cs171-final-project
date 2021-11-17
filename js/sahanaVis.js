@@ -46,9 +46,6 @@ class SahanaVis {
         vis.yAxisGroup = vis.svg.append("g")
             .attr("class", "y-axis axis");
 
-        //this.wrangleData();
-        console.log("finished init")
-        //this.updateVis();
         this.wrangleData();
 
     }
@@ -65,62 +62,6 @@ class SahanaVis {
             return d3.ascending(vis.parseDate(x.date), vis.parseDate(y.date));
         })
 
-        console.log("filtered data");
-        console.log(vis.filtered_data);
-
-
-        // // create a dict of songs, with keys being songIds and values being all the relevant attrs
-        // vis.songDict = {}
-        // vis.audio.forEach((song) => {
-        //     if (!vis.songDict.hasOwnProperty(song.song_id)) {
-        //         vis.songDict[song.song_id] = song;
-        //     }
-        // })
-
-        // vis.attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "loudness", "tempo"];
-        // vis.weeklyDict = {}
-        // vis.billboard.forEach((entry) => {
-        //     if (vis.weeklyDict.hasOwnProperty(entry.week_id)) {
-        //         if (vis.songDict.hasOwnProperty(entry.song_id)) {
-        //             vis.attrsList.forEach((attr) => {
-        //                 let attrVal = vis.songDict[entry.song_id][attr];
-        //                 if (!isNaN(attrVal)) {
-        //                     //console.log(attrVal);
-        //                     vis.weeklyDict[entry.week_id][attr] += attrVal;
-        //                     let attrCount = attr + "Count";
-        //                     vis.weeklyDict[entry.week_id][attrCount] += 1;
-        //                 }
-        //             })
-        //             //console.log("a")
-        //         } 
-        //     }
-        //     else {
-        //         if (vis.songDict.hasOwnProperty(entry.song_id)) {
-        //             vis.weeklyDict[entry.week_id] = {}
-        //             vis.attrsList.forEach((attr) => {
-        //                 let attrVal = vis.songDict[entry.song_id][attr];
-        //                 if (!isNaN(attrVal)) {
-        //                     //console.log(attrVal);
-        //                     vis.weeklyDict[entry.week_id][attr] = attrVal;
-        //                     let attrCount = attr + "Count";
-        //                     vis.weeklyDict[entry.week_id][attrCount] = 1;
-        //                 }
-        //             })
-        //         }
-        //     }
-        // })
-
-        // console.log(vis.weeklyDict); // main dataset to display
-
-        // vis.weeklyList = []
-        // Object.keys(vis.weeklyDict).forEach((entry) => {
-        //     let listEntry = vis.weeklyDict[entry];
-        //     listEntry["date"] = entry;
-        //     vis.weeklyList.push(listEntry);
-        // })
-        // console.log(vis.weeklyList);
-
-        console.log("finished wrangling!");
         this.updateVis();
 
     }
@@ -141,16 +82,10 @@ class SahanaVis {
 
         vis.y.domain([attrMin, attrMax]);
 
-        // bind line to data
-        // var linegraph = vis.svg.selectAll(".line")
-        //             .attr("class","line")
-            //.data([vis.weeklyList]);
     
         var linegraph = vis.svg.append("path")
             .attr("class", "line");
             
-        // console.log("right before the line");
-        // console.log([vis.weeklyList]);
 
         var line = d3.line()
                 .x(function(d, index) { 
