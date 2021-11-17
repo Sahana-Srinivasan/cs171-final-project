@@ -1,19 +1,17 @@
 
 class SahanaVis {
 
-    constructor(_parentElement, _hotStuff, _billboard, _audio) {
+    constructor(_parentElement, _weeklyDict, _weeklyList, _attr) {
         this.parentElement = _parentElement;
-        this.hotStuff = _hotStuff;
-        this.billboard = _billboard;
-        this.audio = _audio;
+        this.weeklyDict = _weeklyDict;
+        this.weeklyList = _weeklyList;
+        this.attr = _attr;
 
         this.initVis();
     }
 
     initVis() {
         let vis = this;
-
-        console.log("h, sahana");
 
 		vis.margin = {top: 0, right: 40, bottom: 30, left: 100};
 		vis.padding = {top: 30, right: 0, bottom: 0, left: 0};
@@ -49,70 +47,80 @@ class SahanaVis {
             .attr("class", "y-axis axis");
 
         //this.wrangleData();
-
-        console.log(vis.hotStuff);
-
-        console.log(vis.billboard);
-        console.log(vis.audio);
-
-        this.updateVis();
+        console.log("finished init")
+        //this.updateVis();
+        this.wrangleData();
 
     }
 
     wrangleData() {
         let vis = this;
 
-        // create a dict of songs, with keys being songIds and values being all the relevant attrs
-        vis.songDict = {}
-        vis.audio.forEach((song) => {
-            if (!vis.songDict.hasOwnProperty(song.song_id)) {
-                vis.songDict[song.song_id] = song;
-            }
+        // filter and sort data based on the chosen attribute 
+        vis.filtered_data = vis.weeklyList.filter((value) => {
+            return !isNaN(value[vis.attr])
+        });
+
+        vis.filtered_data.sort(function(x, y){
+            return d3.ascending(vis.parseDate(x.date), vis.parseDate(y.date));
         })
 
-        vis.attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "loudness", "tempo"];
-        vis.weeklyDict = {}
-        vis.billboard.forEach((entry) => {
-            if (vis.weeklyDict.hasOwnProperty(entry.week_id)) {
-                if (vis.songDict.hasOwnProperty(entry.song_id)) {
-                    vis.attrsList.forEach((attr) => {
-                        let attrVal = vis.songDict[entry.song_id][attr];
-                        if (!isNaN(attrVal)) {
-                            //console.log(attrVal);
-                            vis.weeklyDict[entry.week_id][attr] += attrVal;
-                            let attrCount = attr + "Count";
-                            vis.weeklyDict[entry.week_id][attrCount] += 1;
-                        }
-                    })
-                    //console.log("a")
-                } 
-            }
-            else {
-                if (vis.songDict.hasOwnProperty(entry.song_id)) {
-                    vis.weeklyDict[entry.week_id] = {}
-                    vis.attrsList.forEach((attr) => {
-                        let attrVal = vis.songDict[entry.song_id][attr];
-                        if (!isNaN(attrVal)) {
-                            //console.log(attrVal);
-                            vis.weeklyDict[entry.week_id][attr] = attrVal;
-                            let attrCount = attr + "Count";
-                            vis.weeklyDict[entry.week_id][attrCount] = 1;
-                        }
-                    })
-                }
-            }
-        })
+        console.log("filtered data");
+        console.log(vis.filtered_data);
 
-        console.log(vis.weeklyDict); // main dataset to display
 
-        vis.weeklyList = []
-        Object.keys(vis.weeklyDict).forEach((entry) => {
-            let listEntry = vis.weeklyDict[entry];
-            listEntry["date"] = entry;
-            vis.weeklyList.push(listEntry);
-        })
-        console.log(vis.weeklyList);
+        // // create a dict of songs, with keys being songIds and values being all the relevant attrs
+        // vis.songDict = {}
+        // vis.audio.forEach((song) => {
+        //     if (!vis.songDict.hasOwnProperty(song.song_id)) {
+        //         vis.songDict[song.song_id] = song;
+        //     }
+        // })
 
+        // vis.attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "loudness", "tempo"];
+        // vis.weeklyDict = {}
+        // vis.billboard.forEach((entry) => {
+        //     if (vis.weeklyDict.hasOwnProperty(entry.week_id)) {
+        //         if (vis.songDict.hasOwnProperty(entry.song_id)) {
+        //             vis.attrsList.forEach((attr) => {
+        //                 let attrVal = vis.songDict[entry.song_id][attr];
+        //                 if (!isNaN(attrVal)) {
+        //                     //console.log(attrVal);
+        //                     vis.weeklyDict[entry.week_id][attr] += attrVal;
+        //                     let attrCount = attr + "Count";
+        //                     vis.weeklyDict[entry.week_id][attrCount] += 1;
+        //                 }
+        //             })
+        //             //console.log("a")
+        //         } 
+        //     }
+        //     else {
+        //         if (vis.songDict.hasOwnProperty(entry.song_id)) {
+        //             vis.weeklyDict[entry.week_id] = {}
+        //             vis.attrsList.forEach((attr) => {
+        //                 let attrVal = vis.songDict[entry.song_id][attr];
+        //                 if (!isNaN(attrVal)) {
+        //                     //console.log(attrVal);
+        //                     vis.weeklyDict[entry.week_id][attr] = attrVal;
+        //                     let attrCount = attr + "Count";
+        //                     vis.weeklyDict[entry.week_id][attrCount] = 1;
+        //                 }
+        //             })
+        //         }
+        //     }
+        // })
+
+        // console.log(vis.weeklyDict); // main dataset to display
+
+        // vis.weeklyList = []
+        // Object.keys(vis.weeklyDict).forEach((entry) => {
+        //     let listEntry = vis.weeklyDict[entry];
+        //     listEntry["date"] = entry;
+        //     vis.weeklyList.push(listEntry);
+        // })
+        // console.log(vis.weeklyList);
+
+        console.log("finished wrangling!");
         this.updateVis();
 
     }
@@ -128,23 +136,10 @@ class SahanaVis {
         vis.x.domain([startDate, endDate]);
 
         // Set y domain based on selected attribute
-        let attrWideMax = -1;
-        let attrWideMin = 1;
-    
-        vis.attrsList.forEach((attr) => {
-            let localMax = d3.max(vis.weeklyList, d => d[attr]);
-            let localMin = d3.min(vis.weeklyList, d => d[attr]);
-            if (localMax > attrWideMax) {
-                attrWideMax = localMax;
-            }
-            if (localMin < attrWideMin) {
-                attrWideMin = localMin;
-            }
-        })
-        attrWideMax = 100;
-        attrWideMin = -10;
+        let attrMin = d3.min(vis.weeklyList, d => d[vis.attr]);
+        let attrMax = d3.max(vis.weeklyList, d => d[vis.attr]);
 
-        vis.y.domain([attrWideMin, attrWideMax]);
+        vis.y.domain([attrMin, attrMax]);
 
         // bind line to data
         // var linegraph = vis.svg.selectAll(".line")
@@ -152,47 +147,26 @@ class SahanaVis {
             //.data([vis.weeklyList]);
     
         var linegraph = vis.svg.append("path")
-        .attr("class", "line");
+            .attr("class", "line");
             
-        console.log("right before the line");
-        console.log([vis.weeklyList]);
-
-        vis.filtered_data = vis.weeklyList.filter( (value, index) => {
-            return !isNaN(value.acousticness)
-        });
-
-        vis.filtered_data.sort(function(x, y){
-            return d3.ascending(vis.parseDate(x.date), vis.parseDate(y.date));
-         })
+        // console.log("right before the line");
+        // console.log([vis.weeklyList]);
 
         var line = d3.line()
                 .x(function(d, index) { 
-                    if (index < 3279) {
-                        if (isNaN(d)) {
-                            console.log("d not exist", d);
-                        }
-                        console.log(d);
-                        console.log("in the line attr")
-                        if (!isNaN(d.acousticness)) {
-                            console.log(vis.parseDate(d.date))
-                            console.log(vis.x(vis.parseDate((d.date))))
-                            return vis.x(vis.parseDate(d.date)); 
-                        }
-                        else {
-                            return 0;
-                        }
+                    if (!isNaN(d[vis.attr])) {
+                        return vis.x(vis.parseDate(d.date)); 
                     }
-                    
+                    else {
+                        return 0;
+                    }
                 })
                 .y(function(d, index) {
-                    if (index < 3279) {
-                        if (!isNaN(d.acousticness)) {
-                            console.log(vis.y(d.acousticness));
-                            return vis.y(d.acousticness); 
-                        }
-                        else {
-                            return 0;
-                        }
+                    if (!isNaN(d[vis.attr])) {
+                        return vis.y(d[vis.attr]); 
+                    }
+                    else {
+                        return 0;
                     }
                 })
                 .curve(d3.curveLinear);
@@ -207,6 +181,8 @@ class SahanaVis {
             .call(vis.yAxis);
         vis.svg.select(".x-axis")
             .call(vis.xAxis);
+
+        console.log("finished updating viz");
 
         // hover on the line --> displays attribute name
 
@@ -260,22 +236,35 @@ function createVis(data) {
     let billboard = data[1]
     let audio = data[2]
 
-    let attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "loudness", "tempo"];
+    let attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "loudness", "tempo"];
     let weeklyDict = preProcess(billboard, audio, attrsList);
-
-    let weeklyList = []
-    Object.keys(weeklyDict).forEach((entry) => {
-        let listEntry = weeklyDict[entry];
-        listEntry["date"] = entry;
-        weeklyList.push(listEntry);
-    })
+    let weeklyList = dictToList(weeklyDict, attrsList);
+    console.log("weekly list");
     console.log(weeklyList);
+    console.log("weekly Dict");
+    console.log(weeklyDict)
+
+
 
     attrsList.forEach((attr) => {
         let vis = new SahanaVis(attr + "-over-time", weeklyDict, weeklyList, attr);
     })
 
     //let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
+}
+
+function dictToList(weeklyDict, attrsList) {
+    let weeklyList = []
+    Object.keys(weeklyDict).forEach((entry) => {
+        let listEntry = weeklyDict[entry];
+        listEntry["date"] = entry;
+        attrsList.forEach((attr) => {
+            listEntry[attr] = listEntry[attr] / listEntry[attr + "Count"];
+        })
+        weeklyList.push(listEntry);
+    })
+
+    return weeklyList;
 }
 
 function preProcess(billboard, audio, attrsList) {
