@@ -48,12 +48,14 @@ class SahanaVis {
         vis.yAxisGroup = vis.svg.append("g")
             .attr("class", "y-axis axis");
 
-        this.wrangleData();
+        //this.wrangleData();
 
         console.log(vis.hotStuff);
 
         console.log(vis.billboard);
         console.log(vis.audio);
+
+        this.updateVis();
 
     }
 
@@ -200,40 +202,6 @@ class SahanaVis {
                 .attr("stroke-width", 2.5)
                 .attr("fill", "none");
 
-        // line update - NOT SHOWING UP (NAN somwhere??)
-        // line
-        //     .enter()
-        //     .append("path")
-        //     //.attr("class","line")
-        //     .merge(line)
-        //     .attr("d", d3.line()
-        //         .x(function(d, index) { 
-        //             if (index < 3279) {
-        //                 if (isNaN(d)) {
-        //                     console.log("d not exist", index);
-        //                 }
-        //                 console.log(d);
-        //                 console.log("in the line attr")
-        //                 if (!isNaN(d.acousticness)) {
-        //                     console.log(vis.parseDate(d.date))
-        //                     console.log(vis.x(vis.parseDate((d.date))))
-        //                     return vis.x(vis.parseDate(d.date)); 
-        //                 }
-        //             }
-                    
-        //         })
-        //         .y(function(d, index) {
-        //             if (index < 3279) {
-        //                 if (!isNaN(d.acousticness)) {
-        //                     console.log(vis.y(d.acousticness));
-        //                     return vis.y(d.acousticness); 
-        //                 }
-        //             }
-        //         }))
-        //     //("none")
-        //     .attr("stroke", "steelblue")
-        //     .attr("stroke-width", 2.5);
-
         // axes
         vis.svg.select(".y-axis")
             .call(vis.yAxis);
@@ -277,6 +245,7 @@ let promises = [
 
 dateFormatter = d3.timeFormat("%Y-%m-%d");
 dateParser = d3.timeParse("%m/%d/%Y");
+let desiredAttrs = [""]
 
 Promise.all(promises)
     .then(function (data) {
@@ -291,5 +260,65 @@ function createVis(data) {
     let billboard = data[1]
     let audio = data[2]
 
-    let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
+    let attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "loudness", "tempo"];
+    let weeklyDict = preProcess(billboard, audio, attrsList);
+
+    let weeklyList = []
+    Object.keys(weeklyDict).forEach((entry) => {
+        let listEntry = weeklyDict[entry];
+        listEntry["date"] = entry;
+        weeklyList.push(listEntry);
+    })
+    console.log(weeklyList);
+
+    attrsList.forEach((attr) => {
+        let vis = new SahanaVis(attr + "-over-time", weeklyDict, weeklyList, attr);
+    })
+
+    //let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
+}
+
+function preProcess(billboard, audio, attrsList) {
+    // create a dict of songs, with keys being songIds and values being all the relevant attrs
+    let songDict = {}
+    audio.forEach((song) => {
+        if (!songDict.hasOwnProperty(song.song_id)) {
+            songDict[song.song_id] = song;
+        }
+    })
+
+    let weeklyDict = {}
+    billboard.forEach((entry) => {
+        if (weeklyDict.hasOwnProperty(entry.week_id)) {
+            if (songDict.hasOwnProperty(entry.song_id)) {
+                attrsList.forEach((attr) => {
+                    let attrVal = songDict[entry.song_id][attr];
+                    if (!isNaN(attrVal)) {
+                        //console.log(attrVal);
+                        weeklyDict[entry.week_id][attr] += attrVal;
+                        let attrCount = attr + "Count";
+                        weeklyDict[entry.week_id][attrCount] += 1;
+                    }
+                })
+                //console.log("a")
+            } 
+        }
+        else {
+            if (songDict.hasOwnProperty(entry.song_id)) {
+                weeklyDict[entry.week_id] = {}
+                attrsList.forEach((attr) => {
+                    let attrVal = songDict[entry.song_id][attr];
+                    if (!isNaN(attrVal)) {
+                        //console.log(attrVal);
+                        weeklyDict[entry.week_id][attr] = attrVal;
+                        let attrCount = attr + "Count";
+                        weeklyDict[entry.week_id][attrCount] = 1;
+                    }
+                })
+            }
+        }
+    })
+
+    return weeklyDict;
+
 }
