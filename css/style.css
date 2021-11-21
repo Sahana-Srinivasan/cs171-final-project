@@ -19,3 +19,7 @@
     height: 72vh;
 }
 
+.x-axis text {
+    text-anchor:end;
+}
+

@@ -48,25 +48,24 @@
           </nav>
     </div>
     <div class = "row">
-        <div class = "col sara-col">
+        <div class = "col-sm-6 sara-col">
             <h5 id = "bar-chart-title"> Top 10 Artists in 2000</h5>
             <div id = "bar-chart"></div>
         </div>
-        <div class = "col sara-col">
-
+        <div class = "col-sm-6 sara-col">
             <h5 id = "artist-profile">Artist Profile: <span id = "artist-profile-name"></span></h5>
-            <div id = "artist-top-songs" style = "height: 50%">
-                Top Hits:
+            <div id = "artist-top-songs" style = "height: 35%">
+                <span id = "top-hits" style="visibility:hidden">Top Hits:</span>
             </div>
-            <div>
-                Attributes bar chart here
-                <p>In this visualization we explore the top artists in a year range,
-                     the songs that made it in the billboard top 100 and the types of
-                    attributes the songs have in order to answer the question of "what
-                    makes a song a hit?" during specific time periods.
-                </p>
+            <div id = "song-attributes" style = "height: 51%">
+                SONG: <span id = "song-selection">All</span>
             </div>
         </div>
+        <p>In this visualization we explore the top artists in a year range,
+            the songs that made it in the billboard top 100 and the types of
+            attributes the songs have in order to answer the question of "what
+            makes a song a hit?" during specific time periods.
+        </p>
     </div>
 </div>
 
@@ -82,6 +81,8 @@
 <!-- Visualization objects -->
 <script src="js/saraBarChartVis.js"></script>
 <script src="js/artistProfileVis.js"></script>
+<script src="js/songAttributeVis.js"></script>
+
 
 <!-- Load data, create visualizations -->
 <script src="js/main.js"></script>

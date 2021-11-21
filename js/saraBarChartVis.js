@@ -1,11 +1,9 @@
 
 class SaraBarChartVis {
 
-    constructor(_parentElement, _hotStuff, _billboard, _audio) {
+    constructor(_parentElement, _hotStuff) {
         this.parentElement = _parentElement;
         this.hotStuff = _hotStuff;
-        this.billboard = _billboard;
-        this.audio = _audio;
         this.displayData = [];
 
         this.initVis();
@@ -54,20 +52,20 @@ class SaraBarChartVis {
         vis.hotStuff.forEach(d => {
             if(d.Year === 2000){ // change when you can adjust year
                 let points = 0;
-                if(vis.songRank.has(d.Song)){
-                    points = vis.songRank.get(d.Song);
+                if(vis.songRank.has(d.SongID)){
+                    points = vis.songRank.get(d.SongID);
                 }
                 else {
                     let arr = [];
                     if (vis.artistSongs.has(d.Performer)){
                         arr = vis.artistSongs.get(d.Performer);
                     }
-                    arr.push(d.Song);
+                    arr.push(d.SongID);
                     vis.artistSongs.set(d.Performer, arr);
 
                 }
                 points += 100 - d["Week Position"];
-                vis.songRank.set(d.Song, points);
+                vis.songRank.set(d.SongID, points);
             }
         })
 
