@@ -7,7 +7,7 @@ let colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
               "#FFE8D6", "#D4C7B0", "#A5A58D", "#6B705C",
               "#3F4238", "#20211C"];
 
-let yijiangGenreViz, yijiangMatrixViz;
+let yijiangGenreViz, yijiangMatrixViz, yijiangAttrViz;
 
 // (1) Load data with promises
 
@@ -85,6 +85,7 @@ function createVis(data) {
 
     yijiangGenreViz = new YijiangGenreVis("genreVis", topHits);
     yijiangMatrixViz = new YijiangMatrixVis("matrixVis", topHits);
+    yijiangAttrViz = new YijiangAttrVis("attrVis", topHits);
 
 }
 
@@ -95,6 +96,8 @@ function categoryChange() {
 
     yijiangGenreViz.selectedCategory = +selectedCategory;
     yijiangMatrixViz.selectedCategory = +selectedCategory;
+    yijiangAttrViz.selectedCategory = +selectedCategory;
     yijiangGenreViz.wrangleData();
     yijiangMatrixViz.wrangleData();
+    yijiangAttrViz.wrangleData();
 }

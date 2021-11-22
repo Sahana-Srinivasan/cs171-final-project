@@ -25,6 +25,12 @@ body {
 
 #genreVis {
     height: 100vh;
+    width: 100%;
+}
+
+#attrVis {
+    height: 100vh;
+    width: 100%;
 }
 
 #matrixVis {
