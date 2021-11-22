@@ -13,7 +13,7 @@ class SongAttributeVis {
     initVis() {
         let vis = this;
 
-        vis.margin = {top: 0, right: 40, bottom: 100, left: 10};
+        vis.margin = {top: 0, right: 40, bottom: 110, left: 10};
         vis.padding = {top: 10, right: 0, bottom: 0, left: 0};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
@@ -94,12 +94,13 @@ class SongAttributeVis {
     updateVis(){
         let vis = this;
 
-        let rect = vis.svg.selectAll("rect")
+        let rect = vis.svg.selectAll(".bars")
             .data(vis.displayData);
 
         rect.enter().append("rect")
             .attr("class", "bars")
             .merge(rect)
+            .transition().duration(500)
             .attr("x", d => vis.x(d.attr))
             .attr("y", d => {
                 console.log(d.data);
@@ -109,9 +110,25 @@ class SongAttributeVis {
             .attr("rx", 6)
             .attr("width", vis.x.bandwidth())
             .attr("height", d => vis.y(d.data))
-            .attr("fill", "#fec5bb");
+            .attr("fill", "#AD785C");
 
         rect.exit().remove();
+
+        let outline = vis.svg.selectAll(".outline")
+            .data(vis.displayData);
+
+        outline.enter().append("rect")
+            .attr("class", "outline")
+            .attr("x", d => vis.x(d.attr))
+            .attr("y", d => {
+                return 50;
+            })
+            .attr("rx", 6)
+            .attr("width", vis.x.bandwidth())
+            .attr("height", vis.y(0))
+            .attr("fill", "transparent")
+            .attr("stroke", "black");
+
 
         // Update the y-axis
         vis.svg.select(".x-axis").call(vis.xAxis)

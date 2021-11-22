@@ -4,6 +4,9 @@ class SaraBarChartVis {
     constructor(_parentElement, _hotStuff) {
         this.parentElement = _parentElement;
         this.hotStuff = _hotStuff;
+        this.colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
+            "#FFE8D6", "#D4C7B0", "#A5A58D", "#6B705C",
+            "#3F4238", "#20211C"];
         this.displayData = [];
 
         this.initVis();
@@ -24,6 +27,9 @@ class SaraBarChartVis {
 			.attr("height", vis.height + vis.margin.top + vis.margin.bottom)
 			.append("g")
 			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
+
+        vis.colorScale = d3.scaleBand()
+            .range(vis.colors);
 
         vis.x = d3.scaleLinear()
             .range([0, vis.width - 20]);
@@ -111,6 +117,7 @@ class SaraBarChartVis {
 
         vis.y.domain(vis.displayData.map(d => d.artist));
         vis.x.domain([0, d3.max(vis.displayData, d=> d.totalRank)]);
+        vis.colorScale.domain([0, d3.max(vis.displayData, d=> d.totalRank)]);
         console.log(vis.x.domain());
 
         let rect = vis.svg.selectAll("rect")
@@ -119,17 +126,18 @@ class SaraBarChartVis {
         rect.enter().append("rect")
             .attr("class", "bars")
             .merge(rect)
+            .transition().duration(500)
             .attr("x", 20)
             .attr("y", d => vis.y(d.artist))
             .attr("rx", 6)
             .attr("width", d => vis.x(d.totalRank))
             .attr("height", vis.y.bandwidth())
-            .attr("fill", "#fec5bb");
+            .attr("fill", (d,i) => vis.colors[i]);
 
         rect.exit().remove();
 
         // Update the y-axis
-        vis.svg.select(".y-axis").call(vis.yAxis);
+        vis.svg.select(".y-axis").transition().duration(500).call(vis.yAxis);
         d3.selectAll(".tick text")
             .on("click", function(event, d) {
                 artistProfileName.innerHTML = d;
