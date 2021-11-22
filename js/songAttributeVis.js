@@ -104,7 +104,6 @@ class SongAttributeVis {
             .attr("x", d => vis.x(d.attr))
             .attr("y", d => {
                 console.log(d.data);
-                console.log(vis.y(d.data));
                 return vis.height - vis.y(d.data);
             })
             .attr("rx", 6)
@@ -114,6 +113,9 @@ class SongAttributeVis {
 
         rect.exit().remove();
 
+        console.log(vis.y(1));
+        console.log(vis.y(0));
+
         let outline = vis.svg.selectAll(".outline")
             .data(vis.displayData);
 
@@ -121,7 +123,7 @@ class SongAttributeVis {
             .attr("class", "outline")
             .attr("x", d => vis.x(d.attr))
             .attr("y", d => {
-                return 50;
+                return vis.height - vis.y(0);
             })
             .attr("rx", 6)
             .attr("width", vis.x.bandwidth())
