@@ -3,9 +3,11 @@ class YijiangGenreVis {
 
     constructor(_parentElement, _topHits) {
         this.parentElement = _parentElement;
+        this.topHitsTrue = _topHits;
         this.topHits = _topHits;
         this.data = [];
         this.displayData = [];
+        this.selectedCategory = 1
 
         this.initVis();
     }
@@ -13,11 +15,11 @@ class YijiangGenreVis {
     initVis(){
         let vis = this;
 
-        vis.margin = {top: 50, right: 0, bottom: 50, left: 50};
-        vis.padding = {top: 0, right: 0, bottom: 0, left: 0};
+        vis.margin = {top: 50, right: 50, bottom: 100, left: 50};
+        vis.padding = {top: 50, right: 0, bottom: 50, left: 50};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
-        // vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;
+        vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;
         vis.height = 500 - vis.margin.top - vis.margin.bottom;
         console.log(vis.width, vis.height)
         // SVG drawing area
@@ -33,7 +35,7 @@ class YijiangGenreVis {
             .append('text')
             .attr('class', `bar-title-genre`)
             .text("TOP GENRES")
-            .attr('transform', `translate(${vis.width / 2}, -10)`)
+            .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
         // Scales and axes
@@ -64,21 +66,28 @@ class YijiangGenreVis {
 
     wrangleData(){
         let vis = this;
+
+
+        vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = [];
 
         vis.genreData = new Map();
         vis.topHits.forEach((d,i) => {
-            let genreString = d.spotify_genre.replace(/'/g, '"');
-            if ((genreString != "NA") && (genreString != "[]")) {
-                let genres = JSON.parse(genreString);
-                genres.forEach((d,i) => {
-                    if (vis.genreData.has(d)) {
-                        vis.genreData.set(d, vis.genreData.get(d) + 1);
-                    } else {
-                        vis.genreData.set(d, 1);
-                    }
-                })
-            }
+            let genreString = d.spotify_genre.slice(1,-1);
+            let genres = []
+            genreString.split(", ").forEach((d,i) => {
+                genres.push(d.slice(1,-1));
+            });
+            // console.log(genres)
+
+            genres.forEach((d,i) => {
+                if (d && vis.genreData.has(d)) {
+                    vis.genreData.set(d, vis.genreData.get(d) + 1);
+                } else if (d) {
+                    vis.genreData.set(d, 1);
+                }
+            })
+
         })
         console.log("genreData", vis.genreData)
         vis.genreData.forEach((v,k) => {
@@ -93,14 +102,17 @@ class YijiangGenreVis {
 
         vis.data.sort((a,b) => d3.descending(a.count, b.count));
         console.log(vis.data)
-        vis.displayData = vis.data.slice(0,10);
-        console.log("displayData", vis.displayData)
 
         vis.updateVis();
     }
 
     updateVis(){
         let vis = this;
+
+        // grab the 10 most popular genres
+        vis.displayData = vis.data.slice(0,10);
+        console.log("displayData", vis.displayData)
+
 
         vis.y.domain([0, vis.displayData[0].count]);
         vis.x.domain(vis.displayData.map(function(d) { return d.genre; }))
@@ -125,7 +137,7 @@ class YijiangGenreVis {
             .merge(vis.bars)
             .transition()
             .duration(500)
-            .attr("fill", "green")
+            .attr("fill", (d,i) => colors[i])
             .attr("x", d => vis.x(d.genre))
             .attr("y", d => vis.y(d.count))
             .attr("width", vis.x.bandwidth())
@@ -143,10 +155,10 @@ class YijiangGenreVis {
             .call(vis.xAxis)
             .selectAll("text")
             .attr("y", 0)
-            .attr("x", 9)
-            .attr("dy", ".35em")
-            .attr("transform", "rotate(90)")
-            .style("text-anchor", "start");
+            .attr("x", -9)
+            .attr("dy", "0.35em")
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "end");
 
     }
 
