@@ -14,6 +14,10 @@
     height: 5vh;
 }
 
+h5, #year {
+    display: inline-block;
+}
+
 #artist-top-songs {
     height: 20vh;
 }
