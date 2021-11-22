@@ -2,20 +2,26 @@
 dateFormatter = d3.timeFormat("%Y-%m-%d");
 dateParser = d3.timeParse("%m/%d/%Y");
 
+// color palette
+let colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
+              "#FFE8D6", "#D4C7B0", "#A5A58D", "#6B705C",
+              "#3F4238", "#20211C"];
+
+let yijiangGenreViz, yijiangMatrixViz, yijiangAttrViz;
 
 // (1) Load data with promises
 
 let promises = [
-    d3.csv("data/hot_stuff.csv", row => {
-        row["Peak Position"] = +row["Peak Position"];
-        row["Previous Week Position"] = +row["Previous Week Position"];
-        row["Week Position"] = +row["Week Position"];
-        row["WeekID"] = dateParser(row["WeekID"]);
-        row["Year"] = +d3.timeFormat("%Y")(row["WeekID"]);
-        row["Weeks on Chart"] = +row["Weeks on Chart"];
+    d3.csv("data/billboard.csv", row => {
+        row["instance"] = +row["instance"];
+        row["peak_position"] = +row["peak_position"];
+        row["previous_week_position"] = +row["previous_week_position"];
+        row["week_position"] = +row["week_position"];
+        row["week_id"] = dateParser(row["week_id"]);
+        row["year"] = +d3.timeFormat("%Y")(row["week_id"]);
+        row["weeks_on_chart"] = +row["weeks_on_chart"];
         return row;
     }),
-    d3.csv("data/billboard.csv"), // seems to be the same as hot stuff so not editing for now
     d3.csv("data/audio_features.csv", row => {
         row["acousticness"] = +row["acousticness"];
         row["danceability"] = +row["danceability"];
@@ -44,9 +50,8 @@ Promise.all(promises)
     });
 
 function createVis(data) {
-    let hotStuff = data[0]
-    let billboard = data[1]
-    let audio = data[2]
+    let billboard = data[0]
+    let audio = data[1]
 
     console.log("billboard", billboard);
     console.log("audio", audio);
@@ -60,25 +65,39 @@ function createVis(data) {
     // first get list of number one hits
     let topHits = [];
     billboard.forEach((d,i) => {
-        if (d.week_position == "1") {
-
-            topHits.push(
-                {
-                    index: i,
-                    song_id: d.song_id,
-                    acousticness: songData[d.song_id].acousticness,
-                    energy: songData[d.song_id].energy,
-                    speechiness: songData[d.song_id].speechiness,
-                    instrumentalness: songData[d.song_id].instrumentalness,
-                    liveness: songData[d.song_id].liveness,
-                    valence: songData[d.song_id].valence,
-                    spotify_genre: songData[d.song_id].spotify_genre
-                }
-            )
-        }
+        topHits.push(
+            {
+                index: i,
+                song_id: d.song_id,
+                week_position: d.week_position,
+                acousticness: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].acousticness) ? -1 : songData[d.song_id].acousticness,
+                energy: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].energy) ? -1 : songData[d.song_id].energy,
+                speechiness: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].speechiness) ? -1 : songData[d.song_id].speechiness,
+                instrumentalness: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].instrumentalness) ? -1 : songData[d.song_id].instrumentalness,
+                liveness: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].liveness) ? -1 : songData[d.song_id].liveness,
+                valence: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].valence) ? -1 : songData[d.song_id].valence,
+                danceability: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].danceability) ? -1 : songData[d.song_id].danceability,
+                spotify_genre: (songData[d.song_id] == undefined) ? "[]" : songData[d.song_id].spotify_genre
+            }
+        )
     })
     console.log("topHits", topHits);
 
-    let yijiangGenreViz = new YijiangGenreVis("genreVis", topHits);
+    yijiangGenreViz = new YijiangGenreVis("genreVis", topHits);
+    yijiangMatrixViz = new YijiangMatrixVis("matrixVis", topHits);
+    yijiangAttrViz = new YijiangAttrVis("attrVis", topHits);
 
+}
+
+function categoryChange() {
+
+    selectedCategory =  document.getElementById('categorySelector').value;
+    console.log(+selectedCategory);
+
+    yijiangGenreViz.selectedCategory = +selectedCategory;
+    yijiangMatrixViz.selectedCategory = +selectedCategory;
+    yijiangAttrViz.selectedCategory = +selectedCategory;
+    yijiangGenreViz.wrangleData();
+    yijiangMatrixViz.wrangleData();
+    yijiangAttrViz.wrangleData();
 }

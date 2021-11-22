@@ -3,7 +3,8 @@ let dateFormatter = d3.timeFormat("%Y-%m-%d");
 let dateParser = d3.timeParse("%m/%d/%Y");
 let artistProfileName = document.getElementById("artist-profile-name");
 let topTenArtists = [];
-let artistProfile;
+let topTenArtistsAudio;
+let artistProfile, attributeVis, saraBarChart;
 
 
 // (1) Load data with promises
@@ -50,15 +51,30 @@ function createVis(data) {
     let hotStuff = data[0]
     let billboard = data[1]
     let audio = data[2]
-    console.log(audio)
+    console.log(data);
+    let audioMap = new Map();
 
-    let saraBarChart = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
-    artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, billboard, audio);
+    // changing audio to be a map from song id to the audio info
+    audio.forEach((song) => {
+        if (!audioMap.has(song.song_id)) {
+            audioMap.set(song.song_id, song);
+        }
+    })
+    console.log(audioMap);
 
+    saraBarChart = new SaraBarChartVis("bar-chart", hotStuff);
+    artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, audioMap);
+    attributeVis = new SongAttributeVis("song-attributes", hotStuff, audioMap)
 }
 
 function displayArtistProfile(){
     // update artist profile visualization
-    // artistProfile.wrangleData();
+    artistProfile.wrangleData();
+    attributeVis.wrangleData()
 
+}
+
+function changeTopTen(){
+    console.log("changing");
+    saraBarChart.wrangleData();
 }

@@ -1,5 +1,4 @@
-
-class YijiangGenreVis {
+class YijiangAttrVis {
 
     constructor(_parentElement, _topHits) {
         this.parentElement = _parentElement;
@@ -34,7 +33,7 @@ class YijiangGenreVis {
             .attr('class', `title bar-title`)
             .append('text')
             .attr('class', `bar-title-genre`)
-            .text("TOP GENRES")
+            .text("Attribute Means")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
@@ -69,39 +68,24 @@ class YijiangGenreVis {
 
 
         vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
-        vis.data = [];
-
-        vis.genreData = new Map();
-        vis.topHits.forEach((d,i) => {
-            let genreString = d.spotify_genre.slice(1,-1);
-            let genres = []
-            genreString.split(", ").forEach((d,i) => {
-                genres.push(d.slice(1,-1));
-            });
-            // console.log(genres)
-
-            genres.forEach((d,i) => {
-                if (d && vis.genreData.has(d)) {
-                    vis.genreData.set(d, vis.genreData.get(d) + 1);
-                } else if (d) {
-                    vis.genreData.set(d, 1);
-                }
+        vis.data = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness", "valence"]
+        vis.displayData = []
+        console.log(d3.mean(vis.topHits.map(d => d["energy"])))
+        vis.data.forEach((attr,i) => {
+            console.log(attr, d3.mean(vis.topHits.map(d => d[attr])))
+            vis.displayData.push({
+                attribute: attr,
+                mean: d3.mean(vis.topHits.map(d => {
+                    if (d[attr] >= 0) {
+                        return d[attr]
+                    } else {
+                        return null
+                    }
+                }))
             })
-
         })
-        console.log("genreData", vis.genreData)
-        vis.genreData.forEach((v,k) => {
-            vis.data.push(
-                {
-                    genre: k,
-                    count: v
-                }
-            )
-        })
+        console.log("displayData", vis.displayData);
 
-
-        vis.data.sort((a,b) => d3.descending(a.count, b.count));
-        console.log(vis.data)
 
         vis.updateVis();
     }
@@ -109,16 +93,8 @@ class YijiangGenreVis {
     updateVis(){
         let vis = this;
 
-        // grab the 10 most popular genres
-        vis.displayData = vis.data.slice(0,10);
-        console.log("displayData", vis.displayData)
-
-
-        vis.y.domain([0, vis.displayData[0].count]);
-        vis.x.domain(vis.displayData.map(function(d) { return d.genre; }))
-
-        vis.y.domain([0, d3.max(vis.displayData, d => d.count)]);
-        vis.x.domain(vis.displayData.map(d => d.genre))
+        vis.y.domain([0, 1]);
+        vis.x.domain(vis.displayData.map(d => d.attribute))
 
 
         // draw the bars and labels
@@ -138,10 +114,10 @@ class YijiangGenreVis {
             .transition()
             .duration(500)
             .attr("fill", (d,i) => colors[i])
-            .attr("x", d => vis.x(d.genre))
-            .attr("y", d => vis.y(d.count))
+            .attr("x", d => vis.x(d.attribute))
+            .attr("y", d => vis.y(d.mean))
             .attr("width", vis.x.bandwidth())
-            .attr("height",  d => vis.height - vis.y(d.count))
+            .attr("height",  d => vis.height - vis.y(d.mean))
 
         console.log("done");
 

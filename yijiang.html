@@ -14,14 +14,14 @@
 
 
     <!-- Custom CSS code -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/yijiangStyle.css">
 </head>
 <body>
 
 <div class="container">
 
     <div class="row">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="#">Navbar</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -49,7 +49,7 @@
     </div>
 
     <!-- HEADING -->
-    <div class="row d-flex justify-content-center"
+    <div class="row yijiangRows d-flex justify-content-center"
          style="height: 10vh; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
         <div class="align-self-center" style="margin-left: 0; padding-left: 0;">
             <h1>What makes a hit in the 2000s?</h1>
@@ -57,34 +57,29 @@
     </div>
 
 <!--    justify-content-center -->
-    <div class="row " id="selectDiv">
-        Sorting by the  <select id='categorySelector' class="custom-select align-self-center" style="width: 18vw; margin-left: 1vw; padding-right: 0" onchange="categoryChange()">
-            <option value="numberOneHits" selected>number of #1 hits</option>
-            <option value="numberTenHits">number of Top 10 hits</option>
-            <option value="numberHundredHits">number of Top 100 hits</option>
+    <div class="row yijiangRows" id="selectDiv">
+        Sorting by the  <select id='categorySelector' class="custom-select align-self-center"  onchange="categoryChange()">
+            <option value="1" selected>number of Top 1 hits</option>
+            <option value="10">number of Top 10 hits</option>
+            <option value="100">number of Top 100 hits</option>
 
         </select>
     </div>
 
     <!-- Visualizations -->
-    <div class="row justify-content-center align-items-center" style="width:73vh;  height: 73vh;">
-        <div class="col justify-content-center align-items-center" style="width:36vh;  height: 73vh;">
+    <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" >
+        <div class="col justify-content-center align-items-center row1cols">
             <div class="justify-content-center align-self-center align-items-center" id="genreVis"></div>
 
         </div>
 
-        <div class="col justify-content-center align-items-center" style="width:36vh;  height: 73vh;">
-            <div class="justify-content-center align-self-center align-items-center" id="attrVis">
-                A row of rectangles with fill from the bottom to the top of the average of each attribute, e.g. danceability, energy, etc.
-            </div>
+        <div class="col justify-content-center align-items-center row1cols">
+            <div class="justify-content-center align-self-center align-items-center" id="attrVis"></div>
         </div>
 
     </div>
-    <div class="row justify-content-center align-items-center" style="width:73vh;  height: 73vh;">
-        <div class="justify-content-center align-self-center align-items-center" id="matrixVis">
-            A heatmap of two selected attributes and the frequency of having a certain range of
-            (energy and danceability, for example) among the number 1 hits.
-        </div>
+    <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" >
+        <div class="justify-content-center align-self-center align-items-center" id="matrixVis"></div>
 
     </div>
 
@@ -97,11 +92,13 @@
 
 <!-- d3 -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.rawgit.com/fabid/d3-rectbin/master/rectbin.js"></script>
 
 
 <!-- Visualization objects -->
 <script src="js/yijiangMatrixVis.js"></script>
 <script src="js/yijiangGenreVis.js"></script>
+<script src="js/yijiangAttrVis.js"></script>
 
 <!-- Load data, create visualizations -->
 <script src="js/yijiangVis.js"></script>

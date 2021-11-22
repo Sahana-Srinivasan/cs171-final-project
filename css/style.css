@@ -5,17 +5,35 @@
 .sara-col {
     height: 80vh;
     margin: 1% 1% 0% 1%;
-    background-color: antiquewhite;
     width: 100%;
 }
 
-#bar-chart-title, #artist-profile{
+#bar-chart-title, #artist-profile, #top-hits{
     padding-top: 3%;
     padding-left: 1%;
     height: 5vh;
 }
 
+h5, #year {
+    display: inline-block;
+}
+
+#artist-top-songs {
+    height: 20vh;
+}
+
+#top-hits {
+    padding-top: 2%;
+    padding-left: 1%;
+    padding-bottom: 2%;
+    height: 2vh;
+}
+
 #bar-chart {
     height: 72vh;
+}
+
+.x-axis text {
+    text-anchor:end;
 }
 

@@ -1,10 +1,9 @@
 
 
 class ArtistProfileVis {
-    constructor(_parentElement, _hotStuff, _billboard, _audio) {
+    constructor(_parentElement, _hotStuff, _audio) {
         this.parentElement = _parentElement;
         this.hotStuff = _hotStuff;
-        this.billboard = _billboard;
         this.audio = _audio;
         this.displayData = [];
 
@@ -14,7 +13,7 @@ class ArtistProfileVis {
     initVis(){
         let vis = this;
 
-        vis.margin = {top: 0, right: 40, bottom: 30, left: 10};
+        vis.margin = {top: 0, right: 40, bottom: 10, left: 10};
         vis.padding = {top: 30, right: 0, bottom: 0, left: 0};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
@@ -27,22 +26,21 @@ class ArtistProfileVis {
             .append("g")
             .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
-        vis.wrangleData();
+        if(artistProfileName.innerText != "") vis.wrangleData();
 
     }
     wrangleData(){
         let vis = this;
+        document.getElementById("top-hits").style.visibility = "visible";
 
-        // topTenArtists.forEach(d => {
-        //     console.log(d.artist);
-        //     console.log(artistProfileName.innerText);
-        //     if(d.artist === artistProfileName.innerText){
-        //         vis.displayData = d;
-        //     }
-        // })
-       vis.displayData = topTenArtists[0];
-        console.log(vis.displayData);
+        topTenArtists.forEach(d => {
+            if(d.artist === artistProfileName.innerText){
+                vis.displayData = d;
+                console.log(vis.displayData);
+            }
+        })
 
+        // populate the audio info of all the songs within the top 10 artists
         vis.updateVis();
     }
 
@@ -58,7 +56,11 @@ class ArtistProfileVis {
             .merge(topSongs)
             .attr("x", 0)
             .attr("y", (d,i) => 30 + i*30)
-            .text(d => d)
+            .text(d => vis.audio.get(d).song)
+            .on("click", function(event, d) {
+                document.getElementById("song-selection").innerText = vis.audio.get(d).song;
+                displayArtistProfile();
+            });
 
         topSongs.exit().remove();
 
