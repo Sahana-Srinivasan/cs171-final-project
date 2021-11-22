@@ -1,115 +1,128 @@
-class MatrixVis {
+class YijiangMatrixVis {
 
     // constructor method to initialize Timeline object
-    constructor(parentElement, familyData, businessData, marriageData) {
+    constructor(parentElement, _topHits) {
         this.parentElement = parentElement;
         this.displayData = [];
-        this.familyData = familyData;
-        this.businessData = businessData;
-        this.marriageData = marriageData;
-        this.selectedCategory = "name"
+        this.data = [];
+        this.topHitsTrue = _topHits;
+        this.topHits = _topHits;
+        this.selectedCategory = 1;
+        this.selectedCategory1 = "energy"
+        this.selectedCategory2 = "danceability"
 
-        this.businessColor = "#FFBF77"
-        this.marriageColor = "#819CD8"
-        this.noColor = "#CCCCCC";
 
         // call initVis method
         this.initVis()
     }
 
-    initVis() {
+    initVis(){
         let vis = this;
 
-        // margin conventions
-        vis.margin = {top: 100, right: 100, bottom: 100, left: 100};
+        vis.margin = {top: 50, right: 50, bottom: 100, left: 50};
+        vis.padding = {top: 50, right: 0, bottom: 50, left: 50};
+
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
-        vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
-
-
-        vis.cellPadding = d3.min([vis.height / 55, vis.width / 55]);
-        vis.cellHeight = vis.cellPadding * 2;
-        vis.cellWidth = vis.cellHeight;
-
-        // init drawing area
+        vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;
+        vis.height = 500 - vis.margin.top - vis.margin.bottom;
+        console.log(vis.width, vis.height)
+        // SVG drawing area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
+        // add title
+        vis.svg.append('g')
+            .attr('class', `title matrix-title`)
+            .append('text')
+            .attr('class', `matrix-title-categories`)
+            .text("DANCEABILITY vs ENERGY")
+            .attr('transform', `translate(${vis.width / 2}, -20)`)
+            .attr('text-anchor', 'middle');
 
-        // make marriage legend
-        vis.marriageLegend = vis.svg
-            .append("g")
-            .attr("class", "marriage-legend");
-        vis.marriageLegend
-            .append("rect")
-            .attr("width", vis.cellWidth / 2)
-            .attr("height", vis.cellHeight / 2)
-            .attr("fill", vis.marriageColor);
-        vis.marriageLegend
+        // Scales and axes
+        vis.x = d3.scaleLinear()
+            .nice()
+            .domain([0,1])
+            .range([0, vis.width]);
+
+        vis.y = d3.scaleLinear()
+            .nice()
+            .domain([0,1])
+            .range([vis.height,0]);
+
+        vis.xAxis = d3.axisBottom()
+            .scale(vis.x);
+
+        vis.yAxis = d3.axisLeft()
+            .scale(vis.y);
+
+        vis.cellHeight = vis.y(0.9);
+        vis.cellWidth = vis.x(0.1);
+
+        vis.xAxisGroup = vis.svg.append("g")
+            .attr("class", "x-axis axis")
+            .attr("transform", "translate(0," + vis.height + ")");
+
+        vis.svg.append("g")
+            .attr("class", "x-axis-label")
             .append("text")
-            .text("Marriage")
-            .attr("x", vis.cellWidth )
-            .attr("y", vis.cellHeight / 2);
+            .text("danceability")
+            .style("text-anchor", "middle")
+            .attr("transform", `translate(-40,${vis.height/2})rotate(-90)`);
 
-        vis.marriageLegend
-            .attr("transform", `translate(${17 * vis.cellWidth + 16 * vis.cellPadding}, 0)`)
 
-        // make business legend
-        vis.businessLegend = vis.svg
-            .append("g")
-            .attr("class", "marriage-legend");
-        vis.businessLegend
-            .append("rect")
-            .attr("width", vis.cellWidth / 2)
-            .attr("height", vis.cellHeight / 2)
-            .attr("fill", vis.businessColor);
-        vis.businessLegend
+        vis.svg.append("g")
+            .attr("class", "y-axis-label")
             .append("text")
-            .text("Business Tie")
-            .attr("x", vis.cellWidth )
-            .attr("y", vis.cellHeight / 2);
+            .text("energy")
+            .style("text-anchor", "middle")
+            .attr("transform", `translate(${vis.width/2},${vis.height + 40})`);
 
-        vis.businessLegend
-            .attr("transform", `translate(${17 * vis.cellWidth + 16 * vis.cellPadding}, ${vis.cellHeight + vis.cellPadding})`)
+        vis.yAxisGroup = vis.svg.append("g")
+            .attr("class", "y-axis axis");
 
-        // call next method in pipeline
-        this.wrangleData();
+
+        vis.colors = d3.scaleLinear()
+            .range(["#ffffff", colors[9]]);
+
+        vis.wrangleData();
+
     }
 
     // wrangleData method
     wrangleData() {
         let vis = this
 
-        vis.displayData = []
 
-        vis.familyData.forEach((d,i) => {
-            let businessValues = vis.businessData[i];
-            let marriageValues = vis.marriageData[i];
 
-            // populate the final data structure
+        vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
+        vis.data = [];
+
+        // Reformat the data: d3.rectbin() needs a specific format
+        vis.topHits.forEach(function(d) {
+            if ((d[vis.selectedCategory1] > -1) && (d[vis.selectedCategory2] > -1)) {
+                vis.data.push([+d[vis.selectedCategory1], +d[vis.selectedCategory2]])
+            }
+        })
+        console.log("data", vis.data)
+        vis.displayData = [];
+        d3.range(0,10).forEach((d) => {
             vis.displayData.push(
                 {
-                    index: i,
-                    name: d.Family,
-                    allRelations: d3.sum(businessValues) + d3.sum(marriageValues),
-                    businessTies: d3.sum(businessValues),
-                    businessValues: businessValues,
-                    marriages: d3.sum(marriageValues),
-                    marriageValues: marriageValues,
-                    numberPriorates: d.Priorates,
-                    wealth: d.Wealth
+                    i: d/10,
+                    counts: Array(10).fill(0)
                 }
             )
         })
-
-        console.log("Final unsorted data", vis.displayData)
-
-
-        vis.displayData.sort( (a,b) => d3.ascending(a[vis.selectedCategory], b[vis.selectedCategory]));
-
-        console.log("Final sorted data", vis.displayData)
+        vis.data.forEach((d,i) => {
+            let row = Math.floor(d[0] * 10);
+            let col = Math.floor(d[1] * 10);
+            vis.displayData[row].counts[col] += 1;
+        })
+        console.log("displayData", vis.displayData);
 
         vis.updateVis();
 
@@ -119,22 +132,16 @@ class MatrixVis {
     updateVis() {
         let vis = this;
 
-        // make column labels - these don't change
-        vis.svg.selectAll(".y-label")
-            .data(vis.displayData)
-            .enter()
-            .append("g")
-            .attr("class", "y-label")
-            .append("text")
-            .text(d => d.name)
-            .attr("x", vis.cellPadding)
-            .attr("y", (d,i) => vis.cellWidth + i * (vis.cellPadding + vis.cellWidth))
-            .attr("transform", "rotate(-90)")
+        let maxCount = d3.max(vis.displayData.map(d => d3.max(d.counts)));
+        console.log("maxCount", maxCount);
+
+        vis.colors
+            .domain([0, maxCount])
 
 
         // make the rows
         vis.rows = vis.svg.selectAll(".matrix-row")
-            .data(vis.displayData, d => d.name);
+            .data(vis.displayData, d => d.i);
 
         vis.rows = vis.rows
             .enter()
@@ -142,22 +149,12 @@ class MatrixVis {
             .attr("class", "matrix-row")
             .merge(vis.rows);
 
-        // remove old labels
-        vis.rows.selectAll(".x-labels").remove()
-        vis.rows
-            .append("text")
-            .attr("class", "x-labels")
-            .style("text-anchor", "end")
-            .text(d => d.name)
-            .attr("x", -vis.cellPadding)
-            .attr("y", vis.cellHeight)
-
 
         console.log("Made rows")
 
         // draw a rectangle for each row business (theres a weird gap if i draw two triangles)
         vis.cellsBusiness = vis.rows.selectAll(".matrix-cell-business")
-            .data(d=>d.businessValues);
+            .data(d=>d.counts);
 
         vis.cellsBusiness.enter()
             .append("rect")
@@ -165,36 +162,10 @@ class MatrixVis {
             .merge(vis.cellsBusiness)
             .attr("width", vis.cellWidth)
             .attr("height", vis.cellHeight)
-            .attr('x', (d,i) => i * (vis.cellPadding + vis.cellWidth))
+            .attr('x', (d,i) => i * (vis.cellWidth))
             .attr("y", 0)
             .attr("fill", d => {
-                if (d == 1) {
-                    return vis.businessColor;
-                } else {
-                    return vis.noColor;
-                }
-            });
-
-        // draw a triangle for each row marriage
-        vis.cellsMarriage = vis.rows.selectAll(".matrix-cell-marriages")
-            .data(d=>d.marriageValues);
-        vis.cellsMarriage
-            .enter()
-            .append("path")
-            .attr("class", "matrix-cell-marriages")
-            .merge(vis.cellsMarriage)
-            .attr("d", function(d, index) {
-                // Shift the triangles on the x-axis (columns)
-                let x = (vis.cellWidth + vis.cellPadding) * index;
-                let y = 0;
-                return 'M ' + x +' '+ y + ' l ' + vis.cellWidth + ' 0 l 0 ' + vis.cellHeight + ' z';
-            })
-            .attr("fill", d => {
-                if (d == 1) {
-                    return vis.marriageColor;
-                } else {
-                    return vis.noColor;
-                }
+                return vis.colors(d);
             });
 
 
@@ -203,9 +174,16 @@ class MatrixVis {
             .transition()
             .duration(700)
             .style("fill-opacity", 1)
-            .attr('transform', (d,i) => `translate(0, ${i * (vis.cellPadding + vis.cellWidth)})`);
+            .attr('transform', (d,i) => `translate(0, ${i * ( vis.cellHeight)})`);
+
+        // Update the axis and title
+        vis.svg.select(".y-axis").transition()
+            .duration(500)
+            .call(vis.yAxis);
+        vis.svg.select(".x-axis").transition()
+            .duration(500)
+            .call(vis.xAxis);
 
 
-        console.log("Made cells")
     }
 }

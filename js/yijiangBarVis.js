@@ -1,5 +1,4 @@
-
-class YijiangGenreVis {
+class YijiangBarVis {
 
     constructor(_parentElement, _topHits) {
         this.parentElement = _parentElement;
@@ -34,7 +33,7 @@ class YijiangGenreVis {
             .attr('class', `title bar-title`)
             .append('text')
             .attr('class', `bar-title-genre`)
-            .text("TOP GENRES")
+            .text("Attribute Means")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
