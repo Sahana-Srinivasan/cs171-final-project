@@ -86,7 +86,7 @@ class YijiangMatrixVis {
 
 
         vis.colors = d3.scaleLinear()
-            .range(["#ffffff", colors[9]]);
+            .range(["#ffffff", colors[7]]);
 
         vis.wrangleData();
 
