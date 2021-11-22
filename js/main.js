@@ -50,6 +50,7 @@ function createVis(data) {
     let hotStuff = data[0]
     let billboard = data[1]
     let audio = data[2]
+    console.log(audio)
 
     let saraBarChart = new SaraBarChartVis("bar-chart", hotStuff, billboard, audio);
     artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, billboard, audio);
