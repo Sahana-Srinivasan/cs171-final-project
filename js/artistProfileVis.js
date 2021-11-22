@@ -57,6 +57,12 @@ class ArtistProfileVis {
             .attr("x", 0)
             .attr("y", (d,i) => 30 + i*30)
             .text(d => vis.audio.get(d).song)
+            .on("mouseover", function(event, d) {
+                d3.select(this).style("cursor", "pointer");
+            })
+            .on("mouseout", function(event ,d) {
+                d3.select(this).style("cursor", "default");
+            })
             .on("click", function(event, d) {
                 document.getElementById("song-selection").innerText = vis.audio.get(d).song;
                 displayArtistProfile();
