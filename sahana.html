@@ -15,6 +15,7 @@
 
     <!-- Custom CSS code -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sahana.css">
 </head>
 <body>
 
@@ -49,14 +50,34 @@
     </div>
 
     <div class = "row"  style="height: 80vh; width: 100%">
-      <div class = "col sahana-col" id = "attr-over-time">
+      <div class = "col sahana-col" id = "attrs-over-time">
           <h5 id = "line-graph-title"> Song Characteristics over Time</h5>
+          <div class="row" style="height: 13vh" id = "topsong-over-time">
+            <div class="col-1">
+              <button class="cool-button" id="play-button">Play Animation</button>
+            </div>
+            <div class="col-11" id="slider-viz"></div>
+          </div>
+          <div class="row" style="height: 13vh" id = "songs-over-time">
+            <div class="col-1">
+              <button class="cool-button" id="song-button">Play a Song</button>
+            </div>
+            <div class="col-11" id="song-viz">
+              <audio controls="controls">
+                <source id="song-here" src="https://p.scdn.co/mp3-preview/83090a4db6899eaca689ae35f69126dbe65d94c9?cid=null" type="audio/mpeg"/>
+              </audio>
+            </div>
+          </div>
+          <div class="row" style="height: 13vh" id = "acousticness-over-time"></div>
+          <div class="row" style="height: 13vh" id = "energy-over-time"></div>
+          <div class="row" style="height: 13vh" id = "danceability-over-time"></div>
+          <div class="row" style="height: 13vh" id = "tempo-over-time"></div>
+          <div class="row" style="height: 13vh" id = "instrumentalness-over-time"></div>
 
       </div>
   </div>
   <div class="row">
     <br></br>
-    Part of the story: As the audience explores the visualization, they can compare the state of music over time but since we give continuous graphs for danceability, energy, etc. it’s hard to really understand what defines a hit in various eras. (Currently a bug with NaNs preventing lines from showing up, but all the setup is in the code for the line graphs.)
   </div>
 </div>
 
