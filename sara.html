@@ -48,17 +48,24 @@
           </nav>
     </div>
     <div class = "row">
-        <div class = "col-sm-6 sara-col">
-            <h5 id = "bar-chart-title"> Top 10 Artists in 2000</h5>
+        <div class = "col sara-col">
+            <span><h5 id = "bar-chart-title"> Top 10 Artists in</h5>
+                <select id = "year" class="form-select" aria-label="Year" style = "display:inline-block" onchange = "changeTopTen()">
+                    <option value="1980" selected>1980</option>
+                    <option value="1990">1990</option>
+                    <option value="2000">2000</option>
+                    <option value="2010">2010</option>
+                </select>
+            </span>
             <div id = "bar-chart"></div>
         </div>
-        <div class = "col-sm-6 sara-col">
+        <div class = "col sara-col">
             <h5 id = "artist-profile">Artist Profile: <span id = "artist-profile-name"></span></h5>
+            <h6 id = "top-hits" style="visibility:hidden">Top Hits:</h6>
             <div id = "artist-top-songs" style = "height: 35%">
-                <span id = "top-hits" style="visibility:hidden">Top Hits:</span>
             </div>
-            <div id = "song-attributes" style = "height: 51%">
-                SONG: <span id = "song-selection">All</span>
+            <div id = "song-attributes" style = "height: 51%; visibility:hidden">
+                <h6>SONG: <span id = "song-selection">All</span></h6>
             </div>
         </div>
         <p>In this visualization we explore the top artists in a year range,

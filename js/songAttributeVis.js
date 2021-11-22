@@ -13,8 +13,8 @@ class SongAttributeVis {
     initVis() {
         let vis = this;
 
-        vis.margin = {top: 0, right: 40, bottom: 30, left: 10};
-        vis.padding = {top: 30, right: 0, bottom: 0, left: 0};
+        vis.margin = {top: 0, right: 40, bottom: 100, left: 10};
+        vis.padding = {top: 10, right: 0, bottom: 0, left: 0};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
@@ -50,9 +50,11 @@ class SongAttributeVis {
     }
     wrangleData(){
         let vis = this;
+        document.getElementById("song-attributes").style.visibility = "visible";
+        let type = document.getElementById("song-selection").innerText;
+        console.log(type);
         vis.displayData = [];
         // compute average across all the top songs for the artist
-        console.log("wrangling datain song attributes");
         vis.attributes = new Map();
         let songList;
         topTenArtists.forEach(d => {
@@ -64,15 +66,18 @@ class SongAttributeVis {
 
         // iterate through each song id
         songList.forEach(songID => {
-            // iterate through each attribute we need
-            vis.attrList.forEach(attr => {
-                let attrNum = 0;
-                if(vis.attributes.has(attr)){
-                    attrNum = vis.attributes.get(attr);
-                }
-                attrNum += vis.audio.get(songID)[attr];
-                vis.attributes.set(attr, attrNum);
-            })
+            if(vis.audio.get(songID).song == type || type == "ALL") {
+                // iterate through each attribute we need
+                console.log(type);
+                vis.attrList.forEach(attr => {
+                    let attrNum = 0;
+                    if (vis.attributes.has(attr)) {
+                        attrNum = vis.attributes.get(attr);
+                    }
+                    attrNum += vis.audio.get(songID)[attr];
+                    vis.attributes.set(attr, attrNum);
+                })
+            }
         })
         console.log(vis.attributes);
 

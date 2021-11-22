@@ -4,7 +4,7 @@ let dateParser = d3.timeParse("%m/%d/%Y");
 let artistProfileName = document.getElementById("artist-profile-name");
 let topTenArtists = [];
 let topTenArtistsAudio;
-let artistProfile, attributeVis;
+let artistProfile, attributeVis, saraBarChart;
 
 
 // (1) Load data with promises
@@ -62,7 +62,7 @@ function createVis(data) {
     })
     console.log(audioMap);
 
-    let saraBarChart = new SaraBarChartVis("bar-chart", hotStuff);
+    saraBarChart = new SaraBarChartVis("bar-chart", hotStuff);
     artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, audioMap);
     attributeVis = new SongAttributeVis("song-attributes", hotStuff, audioMap)
 }
@@ -72,4 +72,9 @@ function displayArtistProfile(){
     artistProfile.wrangleData();
     attributeVis.wrangleData()
 
+}
+
+function changeTopTen(){
+    console.log("changing");
+    saraBarChart.wrangleData();
 }

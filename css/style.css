@@ -9,7 +9,7 @@
     width: 100%;
 }
 
-#bar-chart-title, #artist-profile{
+#bar-chart-title, #artist-profile, #top-hits{
     padding-top: 3%;
     padding-left: 1%;
     height: 5vh;

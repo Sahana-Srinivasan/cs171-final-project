@@ -13,7 +13,7 @@ class ArtistProfileVis {
     initVis(){
         let vis = this;
 
-        vis.margin = {top: 0, right: 40, bottom: 30, left: 10};
+        vis.margin = {top: 0, right: 40, bottom: 10, left: 10};
         vis.padding = {top: 30, right: 0, bottom: 0, left: 0};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
@@ -57,6 +57,10 @@ class ArtistProfileVis {
             .attr("x", 0)
             .attr("y", (d,i) => 30 + i*30)
             .text(d => vis.audio.get(d).song)
+            .on("click", function(event, d) {
+                document.getElementById("song-selection").innerText = vis.audio.get(d).song;
+                displayArtistProfile();
+            });
 
         topSongs.exit().remove();
 

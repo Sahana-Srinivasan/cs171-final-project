@@ -48,9 +48,11 @@ class SaraBarChartVis {
         vis.displayData = [];
         vis.artistSongs = new Map();
         vis.songRank = new Map();
+        let year = parseInt(document.getElementById("year").value);
+        console.log("display data for",year);
 
         vis.hotStuff.forEach(d => {
-            if(d.Year === 2000){ // change when you can adjust year
+            if(d.Year === year){ // change when you can adjust year
                 let points = 0;
                 if(vis.songRank.has(d.SongID)){
                     points = vis.songRank.get(d.SongID);
@@ -131,6 +133,7 @@ class SaraBarChartVis {
         d3.selectAll(".tick text")
             .on("click", function(event, d) {
                 artistProfileName.innerHTML = d;
+                document.getElementById("song-selection").innerText = "ALL";
                 displayArtistProfile();
             });
 
