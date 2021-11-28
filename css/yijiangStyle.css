@@ -1,5 +1,10 @@
 /***** YIJIANG'S CSS ******/
 
+h1 {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 .navbar {
     background-color: #D4C7B0;
     padding-left: 5%;
@@ -36,6 +41,8 @@ body {
 #matrixVis {
     padding-top: 0;
     margin-top: 0;
+    height: 80vh;
+    width: 100%;
 }
 
 .row1cols {
@@ -47,4 +54,29 @@ body {
 
 .x-axis {
     font-size: 12px;
+}
+
+#yearSlider {
+    margin-top: 0;
+    width: 400px;
+    height: 200px;
+}
+
+rect.selection {
+    stroke: none;
+    fill: steelblue;
+    fill-opacity: 0.6;
+}
+
+#labelleft, #labelright {
+    dominant-baseline: hanging;
+    font-size: 12px;
+}
+
+#labelleft {
+    text-anchor: end;
+}
+
+#labelright {
+    text-anchor: start;
 }

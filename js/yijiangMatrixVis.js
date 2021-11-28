@@ -8,8 +8,9 @@ class YijiangMatrixVis {
         this.topHitsTrue = _topHits;
         this.topHits = _topHits;
         this.selectedCategory = 1;
-        this.selectedCategory1 = "energy"
-        this.selectedCategory2 = "danceability"
+        this.selectedCategory1 = "energy";
+        this.selectedCategory2 = "danceability";
+        this.yearRange = [1965, 2022];
 
 
         // call initVis method
@@ -24,7 +25,6 @@ class YijiangMatrixVis {
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;
-        vis.height = 500 - vis.margin.top - vis.margin.bottom;
         console.log(vis.width, vis.height)
         // SVG drawing area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -98,7 +98,8 @@ class YijiangMatrixVis {
 
 
 
-        vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
+        vis.topHits = vis.topHitsTrue.filter((d,i) => {return ((d.year >= vis.yearRange[0]) && (d.year < vis.yearRange[1])) })
+        vis.topHits = vis.topHits.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = [];
 
         // Reformat the data: d3.rectbin() needs a specific format
