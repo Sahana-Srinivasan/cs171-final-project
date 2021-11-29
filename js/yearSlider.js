@@ -15,7 +15,7 @@ class YearSlider {
     initVis() {
         let vis = this;
 
-        vis.margin = {top: 80, right: 40, bottom: 85, left: 40};
+        vis.margin = {top: 0, right: 30, bottom: 15, left: 30};
         vis.padding = {top: 0, right: 0, bottom: 0, left: 0};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
@@ -109,19 +109,20 @@ class YearSlider {
             var e = +(d.type == "e"),
                 x = e ? 1 : -1,
                 y = vis.height / 2;
-            return "M" + (.5 * x) + "," + y + "A6,6 0 0 " + e + " " + (6.5 * x) + "," + (y + 6) + "V" + (2 * y - 6) +
-                "A6,6 0 0 " + e + " " + (.5 * x) + "," + (2 * y) + "Z" + "M" + (2.5 * x) + "," + (y + 8) + "V" + (2 * y - 8) +
-                "M" + (4.5 * x) + "," + (y + 8) + "V" + (2 * y - 8);
+            return "M" + (.5 * x) + "," + 6 + "A6,6 0 0 " + e + " " + (6.5 * x) + "," + (y) + "V" + (2 * y) +
+                "A6,6 0 0 " + e + " " + (.5 * x) + "," + (2 * y) + "Z";
         }
 
         vis.handle = vis.brushGroup.selectAll(".handle--custom")
             .data([{type: "w"}, {type: "e"}])
-            .enter().append("path")
+            .enter()
+            .append("circle")
             .attr("class", "handle--custom")
-            .attr("stroke", "#000")
-            .attr("fill", '#eee')
+            .attr("r", vis.height/4)
+            .attr("cy", vis.height *3/4)
+            .attr("fill", colors[7])
             .attr("cursor", "ew-resize")
-            .attr("d", brushResizePath);
+            // .attr("d", brushResizePath);
 
         // override default behaviour - clicking outside of the selected area
         // will select a small piece there rather than deselecting everything

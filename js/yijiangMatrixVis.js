@@ -20,7 +20,7 @@ class YijiangMatrixVis {
     initVis(){
         let vis = this;
 
-        vis.margin = {top: 50, right: 50, bottom: 100, left: 50};
+        vis.margin = {top: 50, right: 150, bottom: 100, left: 50};
         vis.padding = {top: 50, right: 0, bottom: 50, left: 50};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
@@ -85,8 +85,37 @@ class YijiangMatrixVis {
             .attr("class", "y-axis axis");
 
 
-        vis.colors = d3.scaleLinear()
+        // color legend
+        vis.legend = vis.svg.append("g")
+            .attr('class', 'legend')
+
+        vis.legendColor = d3.scaleLinear()
+            .domain([0,100])
             .range(["#ffffff", colors[7]]);
+
+        vis.legendScale = d3.scaleLinear()
+            .range([0,vis.height]);
+
+
+        vis.legendAxis = d3.axisBottom()
+            .scale(vis.legendScale);
+        // make legend
+        let tempData = d3.range(0, 100);
+        vis.legend.selectAll(".legendBox")
+            .data(tempData)
+            .enter()
+            .append("rect")
+            .attr("class", "legendBox")
+            .style("fill", function (d) {
+                console.log(d)
+                return vis.legendColor(d);
+            })
+            .attr("x", d=>d * vis.height / 100)
+            .attr("y", -50)
+            .attr("width", vis.height / 100 + 1)
+            .attr("height", 50)
+
+
 
         vis.wrangleData();
 
@@ -136,7 +165,7 @@ class YijiangMatrixVis {
         let maxCount = d3.max(vis.displayData.map(d => d3.max(d.counts)));
         console.log("maxCount", maxCount);
 
-        vis.colors
+        vis.legendColor
             .domain([0, maxCount])
 
 
@@ -166,7 +195,7 @@ class YijiangMatrixVis {
             .attr('x', (d,i) => i * (vis.cellWidth))
             .attr("y", 0)
             .attr("fill", d => {
-                return vis.colors(d);
+                return vis.legendColor(d);
             });
 
 
@@ -177,7 +206,7 @@ class YijiangMatrixVis {
             .style("fill-opacity", 1)
             .attr('transform', (d,i) => `translate(0, ${i * ( vis.cellHeight)})`);
 
-        // Update the axis and title
+        // Update the axis
         vis.svg.select(".y-axis").transition()
             .duration(500)
             .call(vis.yAxis);
@@ -185,6 +214,25 @@ class YijiangMatrixVis {
             .duration(500)
             .call(vis.xAxis);
 
+
+        // update legend and title
+        vis.legendScale.domain([0,maxCount]);
+        vis.legendAxis.tickValues([0,maxCount]);
+
+
+        vis.legend.call(vis.legendAxis)
+            .attr("y", 0)
+            .attr("x", -9)
+            .attr("dy", "0.35em")
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "center")
+            .transition()
+            .duration(500);
+
+        vis.legend
+            .attr('transform', `translate(${vis.width + 100}, ${vis.height})rotate(-90)`)
+
+        // vis.svg.select(".map-title-text").text(vis.selectedCategory + " in the USA")
 
     }
 }
