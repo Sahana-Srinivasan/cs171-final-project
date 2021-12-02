@@ -60,11 +60,11 @@
           </div>
           <div class="row" style="height: 13vh" id = "songs-over-time">
             <div class="col-1">
-              <button class="cool-button" id="song-button">Play a Song</button>
+              <button class="cool-button" id="song-button">Unmute (Annual Top Song)</button>
             </div>
-            <div class="col-11" id="song-viz">
-              <audio controls="controls">
-                <source id="song-here" src="https://p.scdn.co/mp3-preview/83090a4db6899eaca689ae35f69126dbe65d94c9?cid=null" type="audio/mpeg"/>
+            <div class="col-11" id="song-viz" style="display: none">
+              <audio id="audio" controls="controls">
+                <source id="audioSource" src="" type="audio/mpeg"/>
               </audio>
             </div>
           </div>

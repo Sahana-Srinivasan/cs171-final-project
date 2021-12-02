@@ -225,10 +225,12 @@ class SahanaVis {
 
 class SliderVis {
 
-    constructor(_parentElement, _weeklyDict, _weeklyList) {
+    constructor(_parentElement, _weeklyDict, _weeklyList, _topSongs, _songDict) {
         this.parentElement = _parentElement;
         this.weeklyDict = _weeklyDict;
         this.weeklyList = _weeklyList;
+        this.topSongs = _topSongs;
+        this.songDict = _songDict;
 
         this.initVis();
     }
@@ -240,6 +242,7 @@ class SliderVis {
         vis.parseDate = d3.timeParse("%m/%d/%Y");
         vis.startDate = d3.min(Object.keys(vis.weeklyDict), d => vis.parseDate(d));
         vis.endDate = d3.max(Object.keys(vis.weeklyDict), d => vis.parseDate(d));
+        vis.date = vis.startDate;
 
         vis.margin = {top:50, right:100, bottom:0, left:50},
             
@@ -320,7 +323,7 @@ class SliderVis {
               vis.moving = true;
               vis.timer = d3.timer((elapsed) => {
                 vis.update(vis.x.invert(vis.currentValue));
-                vis.currentValue = vis.currentValue + (vis.targetValue/3051);
+                vis.currentValue = vis.currentValue + (vis.targetValue/2051);
                 if (vis.currentValue > vis.targetValue) {
                     vis.moving = false;
                     vis.currentValue = 0;
@@ -343,20 +346,44 @@ class SliderVis {
 
         vis.songButton
           .on("click", function() {
+            var audio = document.getElementById('audio');
+            var button = d3.select(this);
+            var source = document.getElementById('audioSource');
+            if (button.text() == "Mute (Annual Top Song)") {
+                audio.pause();
+                button.text("Unmute (Annual Top Song)");
+            }
+            else {
+                let currYear = vis.formatDateIntoYear(vis.date)
+                //if (currYear != vis.year) {
+                    let topSongId = vis.topSongs[currYear][0]["song_id"]
+                    source.src = vis.songDict[topSongId].spotify_track_preview_url
+                
+                    audio.load(); //call this to just preload the audio without playing
+                    audio.play();
+                //}
+                
+                vis.year = currYear
+                button.text("Mute (Annual Top Song)");
+            }
            // generate a random song
-           console.log("generate random song");
-           let randInt = Math.floor(Math.random() * vis.weeklyList.length);
 
-        //var audio = document.getElementById('audio');
 
-            var source = document.getElementById('song-here');
-            source.src = vis.weeklyList[randInt].spotify_track_preview_url;
-            console.log(vis.weeklyList[randInt]);
-            console.log(source.src)
+            // let currYear = vis.formatDateIntoYear(vis.date)
+            // let topSongId = vis.topSongs[currYear][0]["song_id"]
+            // source.src = vis.songDict[topSongId].spotify_track_preview_url
+        
+            // audio.load(); //call this to just preload the audio without playing
+            // audio.play(); //call this to play the song right away
+
+            // var source = document.getElementById('song-here');
+            // source.src = vis.weeklyList[randInt].spotify_track_preview_url;
+            // console.log(vis.weeklyList[randInt]);
+            // console.log(source.src)
         //    //let randInt = Math.floor(Math.random() * vis.weeklyList.length);
         //    d3.select("#song-here").attr("src", vis.weeklyList[randInt].spotify_track_preview_url)
           }
-        )
+       )
 
     }
 
@@ -368,9 +395,27 @@ class SliderVis {
           .attr("x", vis.x(h))
           .text(vis.formatDate(h));
 
+        if (vis.songButton.text() == "Mute (Annual Top Song)") {
+            var audio = document.getElementById('audio');
+            var source = document.getElementById('audioSource');
+            
+            let currYear = vis.formatDateIntoYear(h)
+            if (currYear != vis.year) {
+                let topSongId = vis.topSongs[currYear][0]["song_id"]
+                source.src = vis.songDict[topSongId].spotify_track_preview_url
+                console.log(source.src);
+            
+                audio.load(); //call this to just preload the audio without playing
+                audio.play();
+            }
+            vis.year = currYear;
+            
+            //button.text("Mute (Annual Top Song)");
+        }
+
         //console.log("update");
+        vis.date = h;
         dateSlide(h);
-    
       }
 
       
@@ -432,10 +477,20 @@ function createVis(data) {
     let hotStuff = data[0]
     let billboard = data[1]
     let audio = data[2]
+    console.log(data);
+
+    // create a dict of songs, with keys being songIds and values being all the relevant attrs
+    let songDict = {}
+    audio.forEach((song) => {
+        if (!songDict.hasOwnProperty(song.song_id)) {
+            songDict[song.song_id] = song;
+        }
+    })
 
     let attrsList = ["acousticness", "danceability", "energy", "instrumentalness", "tempo"];
-    let weeklyDict = preProcess(billboard, audio, attrsList);
+    let weeklyDict = preProcess(billboard, attrsList, songDict);
     let weeklyList = dictToList(weeklyDict, attrsList);
+    let topSongsByYear = topSongsAnnual(hotStuff, weeklyDict);
     console.log("weekly list");
     console.log(weeklyList);
     console.log("weekly Dict");
@@ -445,7 +500,7 @@ function createVis(data) {
         graphList.push(new SahanaVis(attr + "-over-time", weeklyDict, weeklyList, attr));
     })
 
-    let sliderVis = new SliderVis("slider-viz", weeklyDict, weeklyList);
+    let sliderVis = new SliderVis("slider-viz", weeklyDict, weeklyList, topSongsByYear, songDict);
 
     //let sahanaVis = new SahanaVis("attr-over-time", hotStuff, billboard, audio);
 }
@@ -465,14 +520,7 @@ function dictToList(weeklyDict, attrsList) {
     return weeklyList;
 }
 
-function preProcess(billboard, audio, attrsList) {
-    // create a dict of songs, with keys being songIds and values being all the relevant attrs
-    let songDict = {}
-    audio.forEach((song) => {
-        if (!songDict.hasOwnProperty(song.song_id)) {
-            songDict[song.song_id] = song;
-        }
-    })
+function preProcess(billboard, attrsList, songDict) {
 
     let weeklyDict = {}
     billboard.forEach((entry) => {
@@ -487,7 +535,7 @@ function preProcess(billboard, audio, attrsList) {
                         weeklyDict[entry.week_id][attrCount] += 1;
                     }
                 })
-                //console.log("a")
+                //weeklyDict[entry.week_id]["spotify_track_preview_url"] = songDict[entry.song_id]["spotify_track_preview_url"]
             } 
         }
         else {
@@ -509,3 +557,64 @@ function preProcess(billboard, audio, attrsList) {
     return weeklyDict;
 
 }
+
+function topSongsAnnual(hotStuff, weeklyDict) {
+    let formatDate = d3.timeFormat("%Y");
+    let parseDate= d3.timeParse("%m/%d/%Y")
+
+    let startDate = d3.min(Object.keys(weeklyDict), d => parseDate(d));
+    let endDate = d3.max(Object.keys(weeklyDict), d => parseDate(d));
+
+    let year = formatDate(startDate);
+    let endYear = formatDate(endDate);
+    console.log(year, endYear)
+
+    let annualDict = {}
+
+    console.log(hotStuff);
+    console.log(weeklyDict);
+
+    hotStuff.forEach((entry) => {
+        if (annualDict.hasOwnProperty(entry.Year)) {
+            if (annualDict[entry.Year].hasOwnProperty(entry.SongID)) {
+                annualDict[entry.Year][entry.SongID]["position"] += (100 - entry["Week Position"])
+            }
+            else {
+                annualDict[entry.Year][entry.SongID] = {}
+                annualDict[entry.Year][entry.SongID]["position"] = (100 - entry["Week Position"])
+                annualDict[entry.Year][entry.SongID]["title"] = entry.Song;
+                annualDict[entry.Year][entry.SongID]["artist"] = entry.Performer;
+            }
+        }
+        else {
+            annualDict[entry.Year] = {}
+            annualDict[entry.Year][entry.SongID] = {}
+            annualDict[entry.Year][entry.SongID]["position"] = (100 - entry["Week Position"])
+            annualDict[entry.Year][entry.SongID]["title"] = entry.Song;
+            annualDict[entry.Year][entry.SongID]["artist"] = entry.Performer;
+        }
+    })
+
+
+    let dictOfLists = {}
+
+    Object.keys(annualDict).forEach((year) => {
+        let annualList = []
+        Object.keys(annualDict[year]).forEach((song) => {
+            annualDict[year][song]["song_id"] = song;
+            annualList.push(annualDict[year][song])
+        })
+        annualList.sort(function(x, y){
+            return d3.descending(x["position"], y["position"]);
+        })
+        dictOfLists[year] = annualList;
+    })
+
+    console.log(dictOfLists);
+
+    return dictOfLists;
+}
+
+
+
+
