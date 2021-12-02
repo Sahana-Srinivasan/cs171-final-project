@@ -18,8 +18,9 @@ h5, #year {
     display: inline-block;
 }
 
-#artist-top-songs {
-    height: 20vh;
+.top-song-row:hover {
+    background-color: rgba(0,0,0,0.2);
+    cursor: pointer;
 }
 
 #top-hits {

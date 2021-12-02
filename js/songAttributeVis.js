@@ -35,7 +35,7 @@ class SongAttributeVis {
 
         vis.y = d3.scaleLinear()
             .domain([0,1])
-            .range([vis.height-50, 50]);
+            .range([vis.height, 0]);
 
         vis.xAxis = d3.axisBottom()
             .scale(vis.x)
@@ -52,11 +52,11 @@ class SongAttributeVis {
         let vis = this;
         document.getElementById("song-attributes").style.visibility = "visible";
         let type = document.getElementById("song-selection").innerText;
-        console.log(type);
         vis.displayData = [];
         // compute average across all the top songs for the artist
         vis.attributes = new Map();
         let songList;
+
         topTenArtists.forEach(d => {
             if(d.artist === artistProfileName.innerText){
                 // obtain top hit song id list of the chosen artist
@@ -64,30 +64,40 @@ class SongAttributeVis {
             }
         })
 
+        let totSongs = 0;
+
         // iterate through each song id
         songList.forEach(songID => {
-            if(vis.audio.get(songID).song == type || type == "ALL") {
+            if(vis.audio.get(songID).song === type || type === "ALL") {
+                let attribute;
+                totSongs = 0;
                 // iterate through each attribute we need
-                console.log(type);
                 vis.attrList.forEach(attr => {
+                    let data = [0,0];
                     let attrNum = 0;
+                    attribute = attr;
                     if (vis.attributes.has(attr)) {
-                        attrNum = vis.attributes.get(attr);
+                        data = vis.attributes.get(attr);
                     }
-                    attrNum += vis.audio.get(songID)[attr];
-                    vis.attributes.set(attr, attrNum);
+                    if(!isNaN(vis.audio.get(songID)[attr])) {
+                        data[0] += vis.audio.get(songID)[attr];
+                        if(attr == "energy") console.log(vis.audio.get(songID)[attr]);
+                        data[1]++;
+                    }
+                    vis.attributes.set(attr, data);
                 })
             }
         })
-        console.log(vis.attributes);
 
         // convert attribute data into list
         vis.attrList.forEach(attr => {
-            let data = vis.attributes.get(attr)/songList.length;
-            vis.displayData.push({attr, data});
+            let data = vis.attributes.get(attr);
+            let avg = data[0]/data[1];
+            vis.displayData.push({attr, avg});
         })
 
         console.log(vis.displayData);
+
         vis.updateVis();
     }
 
@@ -103,18 +113,20 @@ class SongAttributeVis {
             .transition().duration(500)
             .attr("x", d => vis.x(d.attr))
             .attr("y", d => {
-                console.log(d.data);
-                return vis.height - vis.y(d.data);
+                let height = vis.y(d.avg);
+                if(isNaN(height)) height = 0;
+                return height;
             })
             .attr("rx", 6)
             .attr("width", vis.x.bandwidth())
-            .attr("height", d => vis.y(d.data))
+            .attr("height", d => {
+                console.log(vis.y(d.avg))
+                if(isNaN(d.avg)) return vis.height - vis.y(0);
+                return vis.height - vis.y(d.avg)
+            })
             .attr("fill", "#AD785C");
 
         rect.exit().remove();
-
-        console.log(vis.y(1));
-        console.log(vis.y(0));
 
         let outline = vis.svg.selectAll(".outline")
             .data(vis.displayData);

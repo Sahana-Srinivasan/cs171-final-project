@@ -15,7 +15,7 @@ class SaraBarChartVis {
     initVis(){
         let vis = this;
 
-		vis.margin = {top: 0, right: 40, bottom: 30, left: 100};
+		vis.margin = {top: 0, right: 40, bottom: 30, left: 130};
 		vis.padding = {top: 30, right: 0, bottom: 0, left: 0};
 
 		vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;

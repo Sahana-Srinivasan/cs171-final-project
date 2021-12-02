@@ -55,14 +55,26 @@
                     <option value="1990">1990</option>
                     <option value="2000">2000</option>
                     <option value="2010">2010</option>
+                    <option value="2021">2021</option>
             </select></h5>
             <div id = "bar-chart"></div>
         </div>
         <div class = "col sara-col">
             <h5 id = "artist-profile">Artist Profile: <span id = "artist-profile-name"></span></h5>
-            <span><h6 id = "top-hits" style="visibility:hidden">Top Hits:</h6></span>
-            <div id = "artist-top-songs"></div>
-            <div id = "song-attributes" style = "height: 51%; visibility:hidden">
+            <table class = "table" id = "top-hits" style="visibility:hidden">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">TITLE</th>
+                        <th scope="col">ALBUM</th>
+                    </tr>
+                </thead>
+                <tbody id = "top-hits2"></tbody>
+            </table>
+            <div id="song-play">
+                <source id="song-here" src="https://p.scdn.co/mp3-preview/83090a4db6899eaca689ae35f69126dbe65d94c9?cid=null" type="audio/mpeg"/>
+            </div>
+            <div id = "song-attributes" style = "height: 42%; visibility:hidden">
                 <h6>SONG: <span id = "song-selection">All</span></h6>
             </div>
         </div>

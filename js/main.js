@@ -59,6 +59,7 @@ function createVis(data) {
         if (!audioMap.has(song.song_id)) {
             audioMap.set(song.song_id, song);
         }
+
     })
     console.log(audioMap);
 
