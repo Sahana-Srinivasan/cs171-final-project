@@ -77,11 +77,6 @@ class SahanaVis {
  
          vis.y.domain([attrMin, attrMax]);
 
-        // Label for graph on the left column
-        //vis.yAxisGroup.append("text").attr("class", "graph-label").text(vis.attr);
-
-        //console.log("init graph");
-
        
         vis.filtered_data = vis.weeklyList.filter((value) => {
             return !isNaN(value[vis.attr])
@@ -113,23 +108,19 @@ class SahanaVis {
     updateVis(startDate) {
         let vis = this;
 
-        // Set the x domain
-
-        // Set the y domain
-        //let startDate = d3.min(Object.keys(vis.weeklyDict), d => vis.parseDate(d));
+        // Set domain
         let endDate = d3.max(Object.keys(vis.weeklyDict), d => vis.parseDate(d));
         
-        let threeYearDate = d3. timeDay.offset(startDate, 1825);
-        if (threeYearDate < endDate) {
-            endDate = threeYearDate;
+        let fiveYearDate = d3. timeDay.offset(startDate, 1825);
+        if (fiveYearDate < endDate) {
+            endDate = fiveYearDate;
+        }
+        else {
+            startDate = d3.timeDay.offset(endDate, -1825);
+            console.log(startDate);
+            console.log(endDate);
         }
         vis.x.domain([startDate, endDate]);
-        //console.log(startDate,endDate);
-        //console.log(int(vis.formatDate(startDate)) + 2);
-
-    
-
-    
 
         var line = d3.line()
                 .x(function(d, index) { 
@@ -190,33 +181,32 @@ class SahanaVis {
         vis.svg.select(".x-axis").transition().duration(40)
             .call(vis.xAxis);
 
-        //console.log("finished updating viz");
-
-        // hover on the line --> displays attribute name
 
     }
 
     dateChange(h) {
         //console.log(h);
+        let startDate = h;
 
         let vis = this;
 
+        // set the range of data we'll display
         let endDate = d3.max(Object.keys(vis.weeklyDict), d => vis.parseDate(d));
         
-        let threeYearDate = d3.timeDay.offset(h, 1825);
-        if (threeYearDate < endDate) {
-            endDate = threeYearDate;
+        let fiveYearDate = d3.timeDay.offset(startDate, 1825);
+        if (fiveYearDate < endDate) {
+            endDate = fiveYearDate;
+        }
+        else {
+            startDate = d3.timeDay.offset(endDate, -1825);
         }
 
 		// Filter data accordingly without changing the original data
 		vis.filtered_data = vis.weeklyList.filter( value => {
-			return (vis.parseDate(value.date) >= h &&
+			return (vis.parseDate(value.date) >= startDate &&
             vis.parseDate(value.date) <= endDate);
         });
-        
-        //console.log(vis.filtered_data);
 
-        //console.log("date changed");
 		// Update the visualization
 		vis.wrangleData(h);
     }
@@ -323,7 +313,7 @@ class SliderVis {
               vis.moving = true;
               vis.timer = d3.timer((elapsed) => {
                 vis.update(vis.x.invert(vis.currentValue));
-                vis.currentValue = vis.currentValue + (vis.targetValue/2051);
+                vis.currentValue = vis.currentValue + (vis.targetValue/5051);
                 if (vis.currentValue > vis.targetValue) {
                     vis.moving = false;
                     vis.currentValue = 0;
@@ -344,6 +334,11 @@ class SliderVis {
             .append("g")
             .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
+        let currYear = vis.formatDateIntoYear(vis.date)
+        let topSongName = vis.topSongs[currYear][0]["title"]
+        let topSongArtist = vis.topSongs[currYear][0]["artist"]
+        document.getElementById("top-song-display").innerText = topSongName + " by " + topSongArtist;
+
         vis.songButton
           .on("click", function() {
             var audio = document.getElementById('audio');
@@ -355,33 +350,23 @@ class SliderVis {
             }
             else {
                 let currYear = vis.formatDateIntoYear(vis.date)
-                //if (currYear != vis.year) {
-                    let topSongId = vis.topSongs[currYear][0]["song_id"]
-                    source.src = vis.songDict[topSongId].spotify_track_preview_url
+                let topSongId = vis.topSongs[currYear][0]["song_id"]
+                source.src = vis.songDict[topSongId].spotify_track_preview_url
+                let topSongName = vis.topSongs[currYear][0]["title"]
+                let topSongArtist = vis.topSongs[currYear][0]["artist"]
                 
-                    audio.load(); //call this to just preload the audio without playing
-                    audio.play();
-                //}
-                
+                if (vis.songDict[topSongId].spotify_track_preview_url == "NA") {
+                    document.getElementById("top-song-display").innerText = topSongName + " by " + topSongArtist + " (audio preview not available)";
+                }
+                else {
+                    document.getElementById("top-song-display").innerText = topSongName + " by " + topSongArtist;
+                }
+                audio.load(); //call this to just preload the audio without playing
+                audio.play();
+                      
                 vis.year = currYear
                 button.text("Mute (Annual Top Song)");
             }
-           // generate a random song
-
-
-            // let currYear = vis.formatDateIntoYear(vis.date)
-            // let topSongId = vis.topSongs[currYear][0]["song_id"]
-            // source.src = vis.songDict[topSongId].spotify_track_preview_url
-        
-            // audio.load(); //call this to just preload the audio without playing
-            // audio.play(); //call this to play the song right away
-
-            // var source = document.getElementById('song-here');
-            // source.src = vis.weeklyList[randInt].spotify_track_preview_url;
-            // console.log(vis.weeklyList[randInt]);
-            // console.log(source.src)
-        //    //let randInt = Math.floor(Math.random() * vis.weeklyList.length);
-        //    d3.select("#song-here").attr("src", vis.weeklyList[randInt].spotify_track_preview_url)
           }
        )
 
@@ -394,26 +379,37 @@ class SliderVis {
         vis.label
           .attr("x", vis.x(h))
           .text(vis.formatDate(h));
+        
+          let currYear = vis.formatDateIntoYear(h)
+
+        let topSongName = vis.topSongs[currYear][0]["title"]
+        let topSongArtist = vis.topSongs[currYear][0]["artist"]
+        
 
         if (vis.songButton.text() == "Mute (Annual Top Song)") {
             var audio = document.getElementById('audio');
             var source = document.getElementById('audioSource');
             
-            let currYear = vis.formatDateIntoYear(h)
             if (currYear != vis.year) {
                 let topSongId = vis.topSongs[currYear][0]["song_id"]
                 source.src = vis.songDict[topSongId].spotify_track_preview_url
-                console.log(source.src);
-            
+                
+                if (vis.songDict[topSongId].spotify_track_preview_url == "NA") {
+                    document.getElementById("top-song-display").innerText = topSongName + " by " + topSongArtist + " (audio preview not available)";
+                }
+                else {
+                    document.getElementById("top-song-display").innerText = topSongName + " by " + topSongArtist;
+                    
+                }
                 audio.load(); //call this to just preload the audio without playing
                 audio.play();
             }
             vis.year = currYear;
-            
-            //button.text("Mute (Annual Top Song)");
+        }
+        else {
+            document.getElementById("top-song-display").innerText = topSongName + " by " + topSongArtist;
         }
 
-        //console.log("update");
         vis.date = h;
         dateSlide(h);
       }
@@ -614,7 +610,3 @@ function topSongsAnnual(hotStuff, weeklyDict) {
 
     return dictOfLists;
 }
-
-
-
-
