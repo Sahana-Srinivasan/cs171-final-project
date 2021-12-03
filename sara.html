@@ -50,13 +50,7 @@
     <div class = "row">
         <div class = "col sara-col">
             <h5 id = "bar-chart-title"> Top 10 Artists in
-            <select id = "year" aria-label="Year" style = "display:inline" onchange = "changeTopTen()">
-                    <option value="1980" selected>1980</option>
-                    <option value="1990">1990</option>
-                    <option value="2000">2000</option>
-                    <option value="2010">2010</option>
-                    <option value="2021">2021</option>
-            </select></h5>
+            <div id = "yearSlider"></div>
             <div id = "bar-chart"></div>
         </div>
         <div class = "col sara-col">
@@ -101,6 +95,7 @@
 <script src="js/saraBarChartVis.js"></script>
 <script src="js/artistProfileVis.js"></script>
 <script src="js/songAttributeVis.js"></script>
+<script src="js/yearSlider.js"></script>
 
 
 <!-- Load data, create visualizations -->

@@ -38,3 +38,27 @@ h5, #year {
     text-anchor:end;
 }
 
+#yearSlider {
+    margin-top: 10px;
+    width: 400px;
+    height: 2.1em;
+}
+
+rect.selection {
+    stroke: none;
+    fill: #6B705C;
+    fill-opacity: 0.6;
+}
+
+#labelleft, #labelright {
+    dominant-baseline: hanging;
+    font-size: 12px;
+}
+
+#labelleft {
+    text-anchor: end;
+}
+
+#labelright {
+    text-anchor: start;
+}

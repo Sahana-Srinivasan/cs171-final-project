@@ -7,6 +7,7 @@ class SaraBarChartVis {
         this.colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
             "#FFE8D6", "#D4C7B0", "#A5A58D", "#6B705C",
             "#3F4238", "#20211C"];
+        this.yearRange = [1965,2021]
         this.displayData = [];
 
         this.initVis();
@@ -54,11 +55,9 @@ class SaraBarChartVis {
         vis.displayData = [];
         vis.artistSongs = new Map();
         vis.songRank = new Map();
-        let year = parseInt(document.getElementById("year").value);
-        console.log("display data for",year);
 
         vis.hotStuff.forEach(d => {
-            if(d.Year === year){ // change when you can adjust year
+            if(d.Year >= vis.yearRange[0] && d.Year <= vis.yearRange[1]){ // change when you can adjust year
                 let points = 0;
                 if(vis.songRank.has(d.SongID)){
                     points = vis.songRank.get(d.SongID);

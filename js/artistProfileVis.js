@@ -12,20 +12,6 @@ class ArtistProfileVis {
 
     initVis(){
         let vis = this;
-
-        // vis.margin = {top: 0, right: 40, bottom: 10, left: 4};
-        // vis.padding = {top: 30, right: 0, bottom: 0, left: 0};
-        //
-        // vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
-        // vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;
-
-        // SVG drawing area
-        // vis.svg = d3.select("#" + vis.parentElement).append("svg")
-        //     .attr("width", vis.width + vis.margin.left + vis.margin.right)
-        //     .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
-        //     .append("g")
-        //     .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
-
         if(artistProfileName.innerText != "") vis.wrangleData();
 
     }
@@ -59,7 +45,15 @@ class ArtistProfileVis {
             .merge(vis.rows)
             .on("click", function(event, d) {
                 document.getElementById("song-selection").innerText = vis.audio.get(d).song;
-                document.getElementById("song-here").src = vis.audio.get(d).spotify_track_preview_url;
+                let audio = document.getElementById("audio");
+                document.getElementById("audioSource").src = vis.audio.get(d).spotify_track_preview_url;
+                if(!audio.paused) {
+                    console.log("music playing");
+                    audio.pause();
+                } else {
+                    audio.load();
+                    audio.play();
+                }
                 displayArtistProfile();
             });
 
@@ -78,29 +72,6 @@ class ArtistProfileVis {
             .attr("class", (d,i) => {
                 if(i === 0) return "song-place";
             });
-        //
-        //
-        // let topSongs = vis.svg.selectAll(".top-artist-songs")
-        //     .data(vis.displayData.songs);
-        //
-        // topSongs.enter().append("text")
-        //     .attr("class", "top-artist-songs")
-        //     .merge(topSongs)
-        //     .attr("x", 0)
-        //     .attr("y", (d,i) => 30 + i*30)
-        //     .text((d,i) => (i+1)+" "+vis.audio.get(d).song)
-        //     .on("mouseover", function(event, d) {
-        //         d3.select(this).style("cursor", "pointer");
-        //     })
-        //     .on("mouseout", function(event ,d) {
-        //         d3.select(this).style("cursor", "default");
-        //     })
-        //     .on("click", function(event, d) {
-        //         document.getElementById("song-selection").innerText = vis.audio.get(d).song;
-        //         displayArtistProfile();
-        //     });
-        //
-        // topSongs.exit().remove();
 
     }
 }
