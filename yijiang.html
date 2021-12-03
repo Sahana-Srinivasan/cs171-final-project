@@ -82,9 +82,30 @@
         </div>
 
     </div>
-    <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" >
+    <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" id="matrixDiv" >
         <div class="justify-content-center align-self-center align-items-center" id="matrixVis"></div>
-
+        <div class="justify-content-center align-self-center align-items-center matrixSelectDiv">
+            <select id='lMatrixSelector' class="custom-select align-self-center"  onchange="lMatrixChange()">
+                <option value="danceability" selected>danceability</option>
+                <option value="acousticness">acousticness</option>
+                <option value="energy">energy</option>
+                <option value="instrumentalness">instrumentalness</option>
+                <option value="tempo">tempo</option>
+                <option value="liveness">liveness</option>
+                <option value="speechiness">speechiness</option>
+                <option value="valence">valence</option>
+            </select>
+            <select id='rMatrixSelector' class="custom-select align-self-center"  onchange="rMatrixChange()">
+                <option value="acousticness">acousticness</option>
+                <option value="danceability">danceability</option>
+                <option value="energy" selected>energy</option>
+                <option value="instrumentalness">instrumentalness</option>
+                <option value="tempo">tempo</option>
+                <option value="liveness">liveness</option>
+                <option value="speechiness">speechiness</option>
+                <option value="valence">valence</option>
+            </select>
+        </div>
     </div>
 
 </div>

@@ -8,8 +8,8 @@ class YijiangMatrixVis {
         this.topHitsTrue = _topHits;
         this.topHits = _topHits;
         this.selectedCategory = 1;
-        this.selectedCategory1 = "energy";
-        this.selectedCategory2 = "danceability";
+        this.selectedCategory1 = "danceability";
+        this.selectedCategory2 = "energy";
         this.yearRange = [1965, 2022];
 
 
@@ -38,7 +38,7 @@ class YijiangMatrixVis {
             .attr('class', `title matrix-title`)
             .append('text')
             .attr('class', `matrix-title-categories`)
-            .text("DANCEABILITY vs ENERGY")
+            .text("energy vs danceability")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
@@ -69,6 +69,7 @@ class YijiangMatrixVis {
         vis.svg.append("g")
             .attr("class", "x-axis-label")
             .append("text")
+            .attr("class", "x-axis-label-text")
             .text("danceability")
             .style("text-anchor", "middle")
             .attr("transform", `translate(-40,${vis.height/2})rotate(-90)`);
@@ -77,6 +78,7 @@ class YijiangMatrixVis {
         vis.svg.append("g")
             .attr("class", "y-axis-label")
             .append("text")
+            .attr("class", "y-axis-label-text")
             .text("energy")
             .style("text-anchor", "middle")
             .attr("transform", `translate(${vis.width/2},${vis.height + 40})`);
@@ -131,7 +133,7 @@ class YijiangMatrixVis {
         vis.topHits = vis.topHits.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = [];
 
-        // Reformat the data: d3.rectbin() needs a specific format
+        // Reformat the data - category1, category2
         vis.topHits.forEach(function(d) {
             if ((d[vis.selectedCategory1] > -1) && (d[vis.selectedCategory2] > -1)) {
                 vis.data.push([+d[vis.selectedCategory1], +d[vis.selectedCategory2]])
@@ -204,7 +206,7 @@ class YijiangMatrixVis {
             .transition()
             .duration(700)
             .style("fill-opacity", 1)
-            .attr('transform', (d,i) => `translate(0, ${i * ( vis.cellHeight)})`);
+            .attr('transform', (d,i) => `translate(0, ${(10 - i - 1) * ( vis.cellHeight)})`);
 
         // Update the axis
         vis.svg.select(".y-axis").transition()
@@ -232,7 +234,14 @@ class YijiangMatrixVis {
         vis.legend
             .attr('transform', `translate(${vis.width + 100}, ${vis.height})rotate(-90)`)
 
-        // vis.svg.select(".map-title-text").text(vis.selectedCategory + " in the USA")
+        vis.svg.select(".matrix-title-categories")
+            .text(`${vis.selectedCategory1} vs ${vis.selectedCategory2}`)
+
+
+        vis.svg.select(".x-axis-label-text")
+            .text(`${vis.selectedCategory1}`)
+        vis.svg.select(".y-axis-label-text")
+            .text(`${vis.selectedCategory2}`)
 
     }
 }
