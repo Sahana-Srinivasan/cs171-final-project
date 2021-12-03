@@ -40,6 +40,11 @@ body {
     width: 100%;
 }
 
+#matrixDiv {
+    margin-top: 10vh;
+    align-content: center;
+}
+
 #matrixVis {
     padding-top: 0;
     margin-top: 0;

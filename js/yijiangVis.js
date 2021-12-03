@@ -130,10 +130,25 @@ function categoryChange() {
     selectedCategory =  document.getElementById('categorySelector').value;
     console.log(+selectedCategory);
 
-    yijiangGenreViz.selectedCategory = +selectedCategory;
     yijiangMatrixViz.selectedCategory = +selectedCategory;
-    yijiangAttrViz.selectedCategory = +selectedCategory;
     yijiangGenreViz.wrangleData();
     yijiangMatrixViz.wrangleData();
     yijiangAttrViz.wrangleData();
+}
+
+function lMatrixChange() {
+
+    selectedCategory =  document.getElementById('lMatrixSelector').value;
+    console.log(selectedCategory);
+
+    yijiangMatrixViz.selectedCategory1 = selectedCategory;
+    yijiangMatrixViz.wrangleData();
+}
+function rMatrixChange() {
+
+    selectedCategory =  document.getElementById('rMatrixSelector').value;
+    console.log(selectedCategory);
+
+    yijiangMatrixViz.selectedCategory2 = selectedCategory;
+    yijiangMatrixViz.wrangleData();
 }
