@@ -63,14 +63,16 @@ class ArtistProfileVis {
         vis.cells = vis.rows.selectAll("td")
             .data((d,i)=> {
                 let album = "Single";
-                if(vis.audio.get(d).spotify_track_album[0] != "{"){
+                let info = vis.audio.get(d);
+                if(!info) return [];
+                
+                if(info.spotify_track_album[0] != "{"){
                     album = vis.audio.get(d).spotify_track_album;
                 }
                 let preview = true;
-                if(vis.audio.get(d).spotify_track_preview_url == "NA"){
+                if(info.spotify_track_preview_url == "NA"){
                     preview = false;
                 }
-                console.log(vis.audio.get(d));
                 return [i+1, vis.audio.get(d).song, album, preview];
             })
         vis.cells.exit().remove();

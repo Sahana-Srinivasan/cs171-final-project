@@ -138,11 +138,14 @@ class SaraBarChartVis {
         // Update the y-axis
         vis.svg.select(".y-axis").transition().duration(500).call(vis.yAxis);
         d3.selectAll(".tick text")
+            .style("font-size", "1.25em")
             .on("mouseover", function(event, d) {
                 d3.select(this).style("cursor", "pointer");
+                d3.select(this).style("fill", "blue");
             })
             .on("mouseout", function(event ,d) {
                 d3.select(this).style("cursor", "default");
+                d3.select(this).style("fill", "black");
             })
             .on("click", function(event, d) {
                 artistProfileName.innerHTML = d;
