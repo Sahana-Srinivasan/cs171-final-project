@@ -95,7 +95,7 @@ class SahanaSliderVis {
               vis.moving = false;
               vis.timer.stop();
               // timer = 0;
-              button.text("Play Animation");
+              button.text("Play");
             } else {
               vis.moving = true;
               vis.timer = d3.timer((elapsed) => {
@@ -106,7 +106,7 @@ class SahanaSliderVis {
                     vis.currentValue = 0;
                     vis.timer.stop();
                     // timer = 0;
-                    vis.playButton.text("Play Animation");
+                    vis.playButton.text("Play");
                 }
               }, 100);
             //   vis.currentValue = vis.currentValue + (vis.targetValue/151);
@@ -131,9 +131,9 @@ class SahanaSliderVis {
             var audio = document.getElementById('audio');
             var button = d3.select(this);
             var source = document.getElementById('audioSource');
-            if (button.text() == "Mute (Annual Top Song)") {
+            if (button.text() == "Mute") {
                 audio.pause();
-                button.text("Unmute (Annual Top Song)");
+                button.text("Unmute");
             }
             else {
                 let currYear = vis.formatDateIntoYear(vis.date)
@@ -152,7 +152,7 @@ class SahanaSliderVis {
                 audio.play();
                       
                 vis.year = currYear
-                button.text("Mute (Annual Top Song)");
+                button.text("Mute");
             }
           }
        )
@@ -173,7 +173,7 @@ class SahanaSliderVis {
         let topSongArtist = vis.topSongs[currYear][0]["artist"]
         
 
-        if (vis.songButton.text() == "Mute (Annual Top Song)") {
+        if (vis.songButton.text() == "Mute") {
             var audio = document.getElementById('audio');
             var source = document.getElementById('audioSource');
             
