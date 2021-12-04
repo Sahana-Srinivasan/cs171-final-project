@@ -221,15 +221,15 @@ class YijiangMatrixVis {
         vis.legendScale.domain([0,maxCount]);
         vis.legendAxis.tickValues([0,maxCount]);
 
-
         vis.legend.call(vis.legendAxis)
-            .attr("y", 0)
-            .attr("x", -9)
-            .attr("dy", "0.35em")
-            .attr("transform", "rotate(-90)")
+            .attr("transform", "rotate(90)")
             .style("text-anchor", "center")
             .transition()
             .duration(500);
+        vis.legend.selectAll("text")
+            .attr("y", "-0.3em")
+            .attr("x", "1.5em")
+            .attr("transform", "rotate(90)")
 
         vis.legend
             .attr('transform', `translate(${vis.width + 100}, ${vis.height})rotate(-90)`)
