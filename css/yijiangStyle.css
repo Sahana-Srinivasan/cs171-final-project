@@ -19,7 +19,7 @@ body {
     margin-left: 10vw;
 }
 
-#categorySelector {
+.selector {
     width: 15vw;
     margin-left: 1em;
     margin-right: 1em;
@@ -40,8 +40,16 @@ body {
     width: 100%;
 }
 
+.selector {
+    height: 2.1em;
+}
+
+#attributeSelectDiv {
+    margin-bottom: 8vh;
+}
+
 #matrixDiv {
-    margin-top: 10vh;
+    margin-top: 30vh;
     align-content: center;
 }
 

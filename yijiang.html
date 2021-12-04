@@ -57,9 +57,9 @@
     </div>
 
 <!--    justify-content-center -->
-    <div class="row yijiangRows" id="selectDiv">
+    <div class="row yijiangRows selectDiv" id="catSelectDiv">
         Sorting by the
-        <select id='categorySelector' class="custom-select "  onchange="categoryChange()">
+        <select id='categorySelector' class="custom-select selector"  onchange="categoryChange()">
             <option value="1" selected>number of Top 1 hits</option>
             <option value="10">number of Top 10 hits</option>
             <option value="100">number of Top 100 hits</option>
@@ -83,29 +83,40 @@
 
     </div>
     <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" id="matrixDiv" >
-        <div class="justify-content-center align-self-center align-items-center" id="matrixVis"></div>
-        <div class="justify-content-center align-self-center align-items-center matrixSelectDiv">
-            <select id='lMatrixSelector' class="custom-select align-self-center"  onchange="lMatrixChange()">
+        <h2>Exploring Relationship between Attributes</h2>
+        <p>
+            With the heatmap, we explore the joint distribution of two attributes of interest, and can see,
+            for the selected time period and types of hits, the count that have a specific value of each attribute.
+            This is especially helpful for identifying the most frequent style of music among the top hits.
+        </p>
+        <div class="row yijiangRows selectDiv" id="attributeSelectDiv">
+            Select the attributes
+            <select id='lMatrixSelector' class="custom-select align-self-center selector"  onchange="lMatrixChange()">
                 <option value="danceability" selected>danceability</option>
                 <option value="acousticness">acousticness</option>
                 <option value="energy">energy</option>
                 <option value="instrumentalness">instrumentalness</option>
-                <option value="tempo">tempo</option>
                 <option value="liveness">liveness</option>
                 <option value="speechiness">speechiness</option>
                 <option value="valence">valence</option>
             </select>
-            <select id='rMatrixSelector' class="custom-select align-self-center"  onchange="rMatrixChange()">
+            and
+            <select id='rMatrixSelector' class="custom-select align-self-center selector"  onchange="rMatrixChange()">
                 <option value="acousticness">acousticness</option>
                 <option value="danceability">danceability</option>
                 <option value="energy" selected>energy</option>
                 <option value="instrumentalness">instrumentalness</option>
-                <option value="tempo">tempo</option>
                 <option value="liveness">liveness</option>
                 <option value="speechiness">speechiness</option>
                 <option value="valence">valence</option>
             </select>
         </div>
+
+        <div class="justify-content-center align-self-center align-items-center" id="matrixVis"></div>
+<!--        <div class="justify-content-center align-self-center align-items-center matrixSelectDiv">-->
+<!--            -->
+<!--            -->
+<!--        </div>-->
     </div>
 
 </div>

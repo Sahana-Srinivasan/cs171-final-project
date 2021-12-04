@@ -51,20 +51,32 @@
 
     <div class = "row"  style="height: 80vh; width: 100%">
       <div class = "col sahana-col" id = "attrs-over-time">
-          <h5 id = "line-graph-title"> Song Characteristics over Time</h5>
-          <div class="row" style="height: 13vh" id = "topsong-over-time">
-            <div class="col-1">
-              <button class="cool-button" id="play-button">Play Animation</button>
-            </div>
-            <div class="col-11" id="slider-viz"></div>
+        <div class="row yijiangRows d-flex justify-content-center"
+          style="height: 10vh; width: 100%; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
+          <div class="col align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+              <h1>Hits over Time</h1>
           </div>
-          <div class="row" style="height: 13vh" id = "songs-over-time">
-            <div class="col-1">
-              <button class="cool-button" id="song-button">Play a Song</button>
-            </div>
-            <div class="col-11" id="song-viz">
-              <audio controls="controls">
-                <source id="song-here" src="https://p.scdn.co/mp3-preview/83090a4db6899eaca689ae35f69126dbe65d94c9?cid=null" type="audio/mpeg"/>
+          <div class="col-1 align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+            <button class="cool-button" id="play-button" >Play</button>
+          </div>
+          <div class="col-1 align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+            <button class="cool-button" id="song-button">Unmute</button>
+          </div>
+      </div>
+        
+         
+          <div class="row" style="height: 10vh" id="slider-viz"></div>
+          <br></br>
+
+          <div class="row yijiangRows d-flex" style="height: 4vh" id ="top-song-display-div">
+              <div class="col-2"><h5>Year's top hit: </h5></div>
+              <div class="col-10 float-start" id="top-song-display"></div>
+          </div>
+          <br></br>
+              
+          <div id="song-viz" style="display: none">
+              <audio id="audio" controls="controls">
+                <source id="audioSource" src="" type="audio/mpeg"/>
               </audio>
             </div>
           </div>
@@ -91,6 +103,8 @@
 
 
 <!-- Visualization objects -->
+<script src="js/sahanaTimelineVis.js"></script>
+<script src="js/sahanaSliderVis.js"></script>
 <script src="js/sahanaVis.js"></script>
 
 <!-- Load data, create visualizations -->
