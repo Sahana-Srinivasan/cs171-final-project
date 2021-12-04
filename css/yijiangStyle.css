@@ -1,5 +1,12 @@
 /***** YIJIANG'S CSS ******/
 
+h1 {
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 .navbar {
     background-color: #D4C7B0;
     padding-left: 5%;
@@ -13,9 +20,9 @@ body {
 }
 
 #categorySelector {
-    align-self: center;
     width: 15vw;
-    margin-left: 1vw;
+    margin-left: 1em;
+    margin-right: 1em;
     padding-right: 0
 }
 
@@ -33,9 +40,16 @@ body {
     width: 100%;
 }
 
+#matrixDiv {
+    margin-top: 10vh;
+    align-content: center;
+}
+
 #matrixVis {
     padding-top: 0;
     margin-top: 0;
+    height: 80vh;
+    width: 100%;
 }
 
 .row1cols {
@@ -47,4 +61,29 @@ body {
 
 .x-axis {
     font-size: 12px;
+}
+
+#yearSlider {
+    margin-top: 0;
+    width: 400px;
+    height: 2.1em;
+}
+
+rect.selection {
+    stroke: none;
+    fill: #6B705C;
+    fill-opacity: 0.6;
+}
+
+#labelleft, #labelright {
+    dominant-baseline: hanging;
+    font-size: 12px;
+}
+
+#labelleft {
+    text-anchor: end;
+}
+
+#labelright {
+    text-anchor: start;
 }

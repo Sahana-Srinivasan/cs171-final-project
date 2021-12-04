@@ -7,7 +7,8 @@ class YijiangGenreVis {
         this.topHits = _topHits;
         this.data = [];
         this.displayData = [];
-        this.selectedCategory = 1
+        this.selectedCategory = 1;
+        this.yearRange = [1965, 2022];
 
         this.initVis();
     }
@@ -67,8 +68,9 @@ class YijiangGenreVis {
     wrangleData(){
         let vis = this;
 
+        vis.topHits = vis.topHitsTrue.filter((d,i) => {return ((d.year >= vis.yearRange[0]) && (d.year < vis.yearRange[1])) })
 
-        vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
+        vis.topHits = vis.topHits.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = [];
 
         vis.genreData = new Map();

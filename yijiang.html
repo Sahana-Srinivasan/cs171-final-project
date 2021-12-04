@@ -50,20 +50,24 @@
 
     <!-- HEADING -->
     <div class="row yijiangRows d-flex justify-content-center"
-         style="height: 10vh; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
-        <div class="align-self-center" style="margin-left: 0; padding-left: 0;">
-            <h1>What makes a hit in the 2000s?</h1>
+         style="height: 10vh; width: 100%; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
+        <div class="col align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+            <h1>What makes a hit?</h1>
         </div>
     </div>
 
 <!--    justify-content-center -->
     <div class="row yijiangRows" id="selectDiv">
-        Sorting by the  <select id='categorySelector' class="custom-select align-self-center"  onchange="categoryChange()">
+        Sorting by the
+        <select id='categorySelector' class="custom-select "  onchange="categoryChange()">
             <option value="1" selected>number of Top 1 hits</option>
             <option value="10">number of Top 10 hits</option>
             <option value="100">number of Top 100 hits</option>
 
         </select>
+
+          over the years of
+        <div id="yearSlider"></div>
     </div>
 
     <!-- Visualizations -->
@@ -78,9 +82,30 @@
         </div>
 
     </div>
-    <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" >
+    <div class="row justify-content-center align-items-center yijiangRows yijiangContentRows" id="matrixDiv" >
         <div class="justify-content-center align-self-center align-items-center" id="matrixVis"></div>
-
+        <div class="justify-content-center align-self-center align-items-center matrixSelectDiv">
+            <select id='lMatrixSelector' class="custom-select align-self-center"  onchange="lMatrixChange()">
+                <option value="danceability" selected>danceability</option>
+                <option value="acousticness">acousticness</option>
+                <option value="energy">energy</option>
+                <option value="instrumentalness">instrumentalness</option>
+                <option value="tempo">tempo</option>
+                <option value="liveness">liveness</option>
+                <option value="speechiness">speechiness</option>
+                <option value="valence">valence</option>
+            </select>
+            <select id='rMatrixSelector' class="custom-select align-self-center"  onchange="rMatrixChange()">
+                <option value="acousticness">acousticness</option>
+                <option value="danceability">danceability</option>
+                <option value="energy" selected>energy</option>
+                <option value="instrumentalness">instrumentalness</option>
+                <option value="tempo">tempo</option>
+                <option value="liveness">liveness</option>
+                <option value="speechiness">speechiness</option>
+                <option value="valence">valence</option>
+            </select>
+        </div>
     </div>
 
 </div>
@@ -99,6 +124,7 @@
 <script src="js/yijiangMatrixVis.js"></script>
 <script src="js/yijiangGenreVis.js"></script>
 <script src="js/yijiangAttrVis.js"></script>
+<script src="js/yearSlider.js"></script>
 
 <!-- Load data, create visualizations -->
 <script src="js/yijiangVis.js"></script>

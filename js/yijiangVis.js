@@ -4,10 +4,10 @@ dateParser = d3.timeParse("%m/%d/%Y");
 
 // color palette
 let colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
-              "#FFE8D6", "#D4C7B0", "#A5A58D", "#6B705C",
+              "#D9C3AD", "#BFB49D", "#A5A58D", "#6B705C",
               "#3F4238", "#20211C"];
 
-let yijiangGenreViz, yijiangMatrixViz, yijiangAttrViz;
+let yijiangGenreViz, yijiangMatrixViz, yijiangAttrViz, yijiangYearSlider;
 
 // (1) Load data with promises
 
@@ -70,6 +70,7 @@ function createVis(data) {
                 index: i,
                 song_id: d.song_id,
                 week_position: d.week_position,
+                year: d.year,
                 acousticness: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].acousticness) ? -1 : songData[d.song_id].acousticness,
                 energy: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].energy) ? -1 : songData[d.song_id].energy,
                 speechiness: (songData[d.song_id] == undefined) || isNaN(songData[d.song_id].speechiness) ? -1 : songData[d.song_id].speechiness,
@@ -83,9 +84,44 @@ function createVis(data) {
     })
     console.log("topHits", topHits);
 
+    let years = topHits.map(d => d.year);
+    console.log("here", topHits.filter(function (d) {
+        return (d.year == 2021)
+    }))
+    console.log(d3.min(years))
+    console.log(d3.max(years))
+
+    // Create event handler
+    let eventHandler = {
+        bind: (eventName, handler) => {
+            document.body.addEventListener(eventName, handler);
+        },
+        trigger: (eventName, extraParameters) => {
+            document.body.dispatchEvent(new CustomEvent(eventName, {
+                detail: extraParameters
+            }));
+        }
+    }
+
     yijiangGenreViz = new YijiangGenreVis("genreVis", topHits);
     yijiangMatrixViz = new YijiangMatrixVis("matrixVis", topHits);
     yijiangAttrViz = new YijiangAttrVis("attrVis", topHits);
+    console.log("hello")
+    yijiangYearSlider = new YearSlider("yearSlider", 1965, 2021, eventHandler);
+
+
+
+
+    // *** TO-DO ***
+    eventHandler.bind("yearChanged", function(event){
+        console.log("yearChanged", event.detail);
+        yijiangGenreViz.yearRange = event.detail;
+        yijiangMatrixViz.yearRange = event.detail;
+        yijiangAttrViz.yearRange = event.detail;
+        yijiangGenreViz.wrangleData();
+        yijiangMatrixViz.wrangleData();
+        yijiangAttrViz.wrangleData();
+    });
 
 }
 
@@ -94,10 +130,25 @@ function categoryChange() {
     selectedCategory =  document.getElementById('categorySelector').value;
     console.log(+selectedCategory);
 
-    yijiangGenreViz.selectedCategory = +selectedCategory;
     yijiangMatrixViz.selectedCategory = +selectedCategory;
-    yijiangAttrViz.selectedCategory = +selectedCategory;
     yijiangGenreViz.wrangleData();
     yijiangMatrixViz.wrangleData();
     yijiangAttrViz.wrangleData();
+}
+
+function lMatrixChange() {
+
+    selectedCategory =  document.getElementById('lMatrixSelector').value;
+    console.log(selectedCategory);
+
+    yijiangMatrixViz.selectedCategory1 = selectedCategory;
+    yijiangMatrixViz.wrangleData();
+}
+function rMatrixChange() {
+
+    selectedCategory =  document.getElementById('rMatrixSelector').value;
+    console.log(selectedCategory);
+
+    yijiangMatrixViz.selectedCategory2 = selectedCategory;
+    yijiangMatrixViz.wrangleData();
 }

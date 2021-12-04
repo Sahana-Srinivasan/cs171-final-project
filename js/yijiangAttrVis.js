@@ -6,7 +6,8 @@ class YijiangAttrVis {
         this.topHits = _topHits;
         this.data = [];
         this.displayData = [];
-        this.selectedCategory = 1
+        this.selectedCategory = 1;
+        this.yearRange = [1965, 2022];
 
         this.initVis();
     }
@@ -67,7 +68,8 @@ class YijiangAttrVis {
         let vis = this;
 
 
-        vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
+        vis.topHits = vis.topHitsTrue.filter((d,i) => {return ((d.year >= vis.yearRange[0]) && (d.year < vis.yearRange[1])) })
+        vis.topHits = vis.topHits.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness", "valence"]
         vis.displayData = []
         console.log(d3.mean(vis.topHits.map(d => d["energy"])))

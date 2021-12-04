@@ -8,8 +8,9 @@ class YijiangMatrixVis {
         this.topHitsTrue = _topHits;
         this.topHits = _topHits;
         this.selectedCategory = 1;
-        this.selectedCategory1 = "energy"
-        this.selectedCategory2 = "danceability"
+        this.selectedCategory1 = "danceability";
+        this.selectedCategory2 = "energy";
+        this.yearRange = [1965, 2022];
 
 
         // call initVis method
@@ -19,12 +20,11 @@ class YijiangMatrixVis {
     initVis(){
         let vis = this;
 
-        vis.margin = {top: 50, right: 50, bottom: 100, left: 50};
+        vis.margin = {top: 50, right: 150, bottom: 100, left: 50};
         vis.padding = {top: 50, right: 0, bottom: 50, left: 50};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;
-        vis.height = 500 - vis.margin.top - vis.margin.bottom;
         console.log(vis.width, vis.height)
         // SVG drawing area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -38,7 +38,7 @@ class YijiangMatrixVis {
             .attr('class', `title matrix-title`)
             .append('text')
             .attr('class', `matrix-title-categories`)
-            .text("DANCEABILITY vs ENERGY")
+            .text("energy vs danceability")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
@@ -69,6 +69,7 @@ class YijiangMatrixVis {
         vis.svg.append("g")
             .attr("class", "x-axis-label")
             .append("text")
+            .attr("class", "x-axis-label-text")
             .text("danceability")
             .style("text-anchor", "middle")
             .attr("transform", `translate(-40,${vis.height/2})rotate(-90)`);
@@ -77,6 +78,7 @@ class YijiangMatrixVis {
         vis.svg.append("g")
             .attr("class", "y-axis-label")
             .append("text")
+            .attr("class", "y-axis-label-text")
             .text("energy")
             .style("text-anchor", "middle")
             .attr("transform", `translate(${vis.width/2},${vis.height + 40})`);
@@ -85,8 +87,37 @@ class YijiangMatrixVis {
             .attr("class", "y-axis axis");
 
 
-        vis.colors = d3.scaleLinear()
+        // color legend
+        vis.legend = vis.svg.append("g")
+            .attr('class', 'legend')
+
+        vis.legendColor = d3.scaleLinear()
+            .domain([0,100])
             .range(["#ffffff", colors[7]]);
+
+        vis.legendScale = d3.scaleLinear()
+            .range([0,vis.height]);
+
+
+        vis.legendAxis = d3.axisBottom()
+            .scale(vis.legendScale);
+        // make legend
+        let tempData = d3.range(0, 100);
+        vis.legend.selectAll(".legendBox")
+            .data(tempData)
+            .enter()
+            .append("rect")
+            .attr("class", "legendBox")
+            .style("fill", function (d) {
+                console.log(d)
+                return vis.legendColor(d);
+            })
+            .attr("x", d=>d * vis.height / 100)
+            .attr("y", -50)
+            .attr("width", vis.height / 100 + 1)
+            .attr("height", 50)
+
+
 
         vis.wrangleData();
 
@@ -98,10 +129,11 @@ class YijiangMatrixVis {
 
 
 
-        vis.topHits = vis.topHitsTrue.filter((d,i) => {return d.week_position <= vis.selectedCategory});
+        vis.topHits = vis.topHitsTrue.filter((d,i) => {return ((d.year >= vis.yearRange[0]) && (d.year < vis.yearRange[1])) })
+        vis.topHits = vis.topHits.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = [];
 
-        // Reformat the data: d3.rectbin() needs a specific format
+        // Reformat the data - category1, category2
         vis.topHits.forEach(function(d) {
             if ((d[vis.selectedCategory1] > -1) && (d[vis.selectedCategory2] > -1)) {
                 vis.data.push([+d[vis.selectedCategory1], +d[vis.selectedCategory2]])
@@ -135,7 +167,7 @@ class YijiangMatrixVis {
         let maxCount = d3.max(vis.displayData.map(d => d3.max(d.counts)));
         console.log("maxCount", maxCount);
 
-        vis.colors
+        vis.legendColor
             .domain([0, maxCount])
 
 
@@ -165,7 +197,7 @@ class YijiangMatrixVis {
             .attr('x', (d,i) => i * (vis.cellWidth))
             .attr("y", 0)
             .attr("fill", d => {
-                return vis.colors(d);
+                return vis.legendColor(d);
             });
 
 
@@ -174,9 +206,9 @@ class YijiangMatrixVis {
             .transition()
             .duration(700)
             .style("fill-opacity", 1)
-            .attr('transform', (d,i) => `translate(0, ${i * ( vis.cellHeight)})`);
+            .attr('transform', (d,i) => `translate(0, ${(10 - i - 1) * ( vis.cellHeight)})`);
 
-        // Update the axis and title
+        // Update the axis
         vis.svg.select(".y-axis").transition()
             .duration(500)
             .call(vis.yAxis);
@@ -184,6 +216,32 @@ class YijiangMatrixVis {
             .duration(500)
             .call(vis.xAxis);
 
+
+        // update legend and title
+        vis.legendScale.domain([0,maxCount]);
+        vis.legendAxis.tickValues([0,maxCount]);
+
+
+        vis.legend.call(vis.legendAxis)
+            .attr("y", 0)
+            .attr("x", -9)
+            .attr("dy", "0.35em")
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "center")
+            .transition()
+            .duration(500);
+
+        vis.legend
+            .attr('transform', `translate(${vis.width + 100}, ${vis.height})rotate(-90)`)
+
+        vis.svg.select(".matrix-title-categories")
+            .text(`${vis.selectedCategory1} vs ${vis.selectedCategory2}`)
+
+
+        vis.svg.select(".x-axis-label-text")
+            .text(`${vis.selectedCategory1}`)
+        vis.svg.select(".y-axis-label-text")
+            .text(`${vis.selectedCategory2}`)
 
     }
 }

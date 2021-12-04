@@ -4,7 +4,11 @@ let dateParser = d3.timeParse("%m/%d/%Y");
 let artistProfileName = document.getElementById("artist-profile-name");
 let topTenArtists = [];
 let topTenArtistsAudio;
-let artistProfile, attributeVis, saraBarChart;
+// color palette
+let colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
+    "#D9C3AD", "#BFB49D", "#A5A58D", "#6B705C",
+    "#3F4238", "#20211C"];
+let artistProfile, attributeVis, saraBarChart, yearSlider;
 
 
 // (1) Load data with promises
@@ -59,12 +63,33 @@ function createVis(data) {
         if (!audioMap.has(song.song_id)) {
             audioMap.set(song.song_id, song);
         }
+
     })
     console.log(audioMap);
 
+    // Create event handler
+    let eventHandler = {
+        bind: (eventName, handler) => {
+            document.body.addEventListener(eventName, handler);
+        },
+        trigger: (eventName, extraParameters) => {
+            document.body.dispatchEvent(new CustomEvent(eventName, {
+                detail: extraParameters
+            }));
+        }
+    }
+
     saraBarChart = new SaraBarChartVis("bar-chart", hotStuff);
     artistProfile = new ArtistProfileVis("artist-top-songs", hotStuff, audioMap);
-    attributeVis = new SongAttributeVis("song-attributes", hotStuff, audioMap)
+    attributeVis = new SongAttributeVis("song-attributes", hotStuff, audioMap);
+    yearSlider = new YearSlider("yearSlider", 1965, 2021, eventHandler);
+
+    eventHandler.bind("yearChanged", function(event){
+        console.log("yearChanged", event.detail);
+        saraBarChart.yearRange = event.detail;
+        changeTopTen();
+    });
+
 }
 
 function displayArtistProfile(){
