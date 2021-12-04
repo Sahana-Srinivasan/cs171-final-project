@@ -99,6 +99,10 @@ function displayArtistProfile(){
 
 }
 
+function updateSongAttributes(){
+    attributeVis.wrangleData();
+}
+
 function changeTopTen(){
     console.log("changing");
     saraBarChart.wrangleData();

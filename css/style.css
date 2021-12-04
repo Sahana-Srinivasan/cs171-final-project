@@ -62,3 +62,12 @@ rect.selection {
 #labelright {
     text-anchor: start;
 }
+
+.fa {
+    padding-top: 5%;
+    font-size: 28px;
+}
+
+td {
+    border-bottom: none !important;
+}

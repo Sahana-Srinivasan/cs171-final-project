@@ -47,14 +47,17 @@ class ArtistProfileVis {
                 document.getElementById("song-selection").innerText = vis.audio.get(d).song;
                 let audio = document.getElementById("audio");
                 document.getElementById("audioSource").src = vis.audio.get(d).spotify_track_preview_url;
-                if(!audio.paused) {
-                    console.log("music playing");
-                    audio.pause();
-                } else {
-                    audio.load();
-                    audio.play();
-                }
-                displayArtistProfile();
+                audio.load();
+                audio.play();
+
+                // if(!audio.paused) {
+                //     console.log("music playing");
+                //     audio.pause();
+                // } else {
+                //     audio.load();
+                //     audio.play();
+                // }
+                updateSongAttributes();
             });
 
         vis.cells = vis.rows.selectAll("td")
@@ -63,15 +66,54 @@ class ArtistProfileVis {
                 if(vis.audio.get(d).spotify_track_album[0] != "{"){
                     album = vis.audio.get(d).spotify_track_album;
                 }
-                return [i+1, vis.audio.get(d).song, album];
+                let preview = true;
+                if(vis.audio.get(d).spotify_track_preview_url == "NA"){
+                    preview = false;
+                }
+                console.log(vis.audio.get(d));
+                return [i+1, vis.audio.get(d).song, album, preview];
             })
         vis.cells.exit().remove();
-        vis.cells.enter().append("td")
+
+        vis.cells = vis.cells.enter().append("td")
             .merge(vis.cells)
-            .text(d=>d)
+            .text((d,i)=> {
+                if (i != 3) return d;
+            })
             .attr("class", (d,i) => {
-                if(i === 0) return "song-place";
+                if(i === 0) {
+                    return "song-place"+i;
+                }
+                else if(i === 3){
+                    console.log(d);
+                    if(d) return "fa fa-play-circle";
+                }
             });
+
+        // vis.cells = vis.cells.selectAll("td")
+        //     .data(d => d[0])
+        // vis.cells.exit().remove();
+
+
+        // vis.cells.selectAll("i")
+        //     .data(d=>d[0])
+        //     .merge(vis.cells)
+        //     .append("i")
+        //     .attr("class", (d,i) => {
+        //         console.log(d);
+        //         if(i == 0) return "fa fa-play-circle";
+        //     })
+
+        // vis.icons = vis.cells.selectAll(".play-icon")
+        // //     .data(d=>[""])
+        // // vis.icons.exit().remove();
+        //
+        // vis.icons.append("td").insert("i")
+        //     .merge(vis.icons)
+        //     .attr("class", (d,i) => {
+        //         console.log(d);
+        //         if(i == 3) return "fa fa-play-circle";
+        //     });
 
     }
 }
