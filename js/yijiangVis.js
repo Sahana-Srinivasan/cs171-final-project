@@ -125,9 +125,9 @@ function yijiang_createVis(data) {
 
 }
 
-function categoryChange() {
-
-    selectedCategory =  document.getElementById('categorySelector').value;
+function genreCategoryChange() {
+    console.log("yijiang was here");
+    selectedCategory =  document.getElementById('genreCategorySelector').value;
     console.log(+selectedCategory);
 
     yijiangMatrixViz.selectedCategory = +selectedCategory;

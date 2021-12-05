@@ -77,7 +77,7 @@ class YijiangAttrVis {
         vis.topHits = vis.topHits.filter((d,i) => {return d.week_position <= vis.selectedCategory});
         vis.data = ["acousticness", "danceability", "energy", "instrumentalness", "liveness", "speechiness", "valence"]
         vis.displayData = []
-        console.log(d3.mean(vis.topHits.map(d => d["energy"])))
+        console.log("filtered top hits", vis.topHits)
         vis.data.forEach((attr,i) => {
             console.log(attr, d3.mean(vis.topHits.map(d => d[attr])))
             vis.displayData.push({
