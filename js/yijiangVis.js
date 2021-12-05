@@ -131,6 +131,8 @@ function genreCategoryChange() {
     console.log(+selectedCategory);
 
     yijiangMatrixViz.selectedCategory = +selectedCategory;
+    yijiangGenreViz.selectedCategory = +selectedCategory;
+    yijiangAttrViz.selectedCategory = +selectedCategory;
     yijiangGenreViz.wrangleData();
     yijiangMatrixViz.wrangleData();
     yijiangAttrViz.wrangleData();
