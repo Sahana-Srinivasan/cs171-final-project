@@ -65,7 +65,7 @@ class ArtistProfileVis {
                 let album = "Single";
                 let info = vis.audio.get(d);
                 if(!info) return [];
-                
+
                 if(info.spotify_track_album[0] != "{"){
                     album = vis.audio.get(d).spotify_track_album;
                 }
