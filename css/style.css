@@ -62,3 +62,36 @@ rect.selection {
 #labelright {
     text-anchor: start;
 }
+
+#title-page {
+    background-color: black;
+    --bs-gutter-x: 0rem !important;
+}
+
+#main-title {
+    font-size: 120px;
+    color: white;
+    margin-left: 10vw;
+    line-height: 120px;
+}
+
+#main-desc {
+    font-size: 26px;
+    color: white;
+    margin-left: 5vw;
+}
+
+#credits {
+    font-size: 20px;
+    color: white;
+}
+
+.intro-blurb {
+    text-align: center;
+    font-size: 28px;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    line-height: 36px;
+    margin-top: 20vh;
+    margin-bottom: 20vh;
+}

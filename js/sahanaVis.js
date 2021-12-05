@@ -100,7 +100,7 @@ function createVis(data) {
 
     let sliderVis = new SahanaSliderVis("slider-viz", weeklyDict, weeklyList, topSongsByYear, songDict, eventHandler);
 
-    eventHandler.bind("yearChanged", function(event){
+    eventHandler.bind("timelineYearChanged", function(event){
         graphList.forEach((graph) => {
             graph.dateChange(event.detail);
         })

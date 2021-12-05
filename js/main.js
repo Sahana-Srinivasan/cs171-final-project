@@ -13,7 +13,7 @@ let artistProfile, attributeVis, saraBarChart, yearSlider;
 
 // (1) Load data with promises
 
-let promises = [
+let sara_promises = [
     d3.csv("data/hot_stuff.csv", row => {
         row["Peak Position"] = +row["Peak Position"];
         row["Previous Week Position"] = +row["Previous Week Position"];
@@ -43,15 +43,15 @@ let promises = [
     })
 ];
 
-Promise.all(promises)
+Promise.all(sara_promises)
     .then(function (data) {
-        createVis(data)
+        sara_createVis(data)
     })
     .catch(function (err) {
         console.log(err)
     });
 
-function createVis(data) {
+function sara_createVis(data) {
     let hotStuff = data[0]
     let billboard = data[1]
     let audio = data[2]

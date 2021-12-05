@@ -15,8 +15,8 @@ h1 {
 body {
     align-items: center;
     align-content: center;
-    margin-right: 10vw;
-    margin-left: 10vw;
+    /* margin-right: 10vw;
+    margin-left: 10vw; */
 }
 
 .selector {
@@ -26,9 +26,18 @@ body {
     padding-right: 0
 }
 
-.yijiangContentRows {
-    height: 65vh;
+#matrixVis {
+    padding-top: 0;
+    margin-top: 0;
+    height: 80vh;
+    width: 100%;
+    margin-bottom: 140px;
 }
+
+
+/* .yijiangContentRows {
+    height: 80vh;
+} */
 
 #genreVis {
     height: 100vh;
@@ -38,6 +47,7 @@ body {
 #attrVis {
     height: 100vh;
     width: 100%;
+    margin-bottom: 60px;
 }
 
 .selector {
@@ -51,13 +61,6 @@ body {
 #matrixDiv {
     margin-top: 30vh;
     align-content: center;
-}
-
-#matrixVis {
-    padding-top: 0;
-    margin-top: 0;
-    height: 80vh;
-    width: 100%;
 }
 
 .row1cols {

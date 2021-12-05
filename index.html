@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CS171 - Lab 10</title>
+    <title>What makes a hit?</title>
 
     <link href="https://fonts.googleapis.com/css?family=Neuton:300,400,400i,700,800" rel="stylesheet">
 
@@ -15,40 +15,199 @@
 
     <!-- Custom CSS code -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/sahana.css">
+    <link rel="stylesheet" href="css/yijiangStyle.css">
 </head>
 <body>
 
+  
+<!-- INTRO: IMMERSIVE -->
+<div class="row" style="height: 90vh; width: 100%" id="title-page">
+<div class="col-5 align-self-center" id="main-title">What makes a hit song?</div>
+
+<div class="col-4 align-self-center" id="main-desc">
+  We're music lovers, so we set out to quantitatively analyze the biggest music hits of the last seven decades via Billboard Hot 100 data. 
+  What characteristics do the top songs on this chart have in common, and how do the quintessential hits of music eras differ? Who's making the hits? We hope
+  to provide a better understanding of what ingredients go into popular songs and how the industry has evolved.
+</div>
+</div>
+<div class="row" style="height: 10vh; width: 100%; text-align: center" id="title-page">
+  <div class="align-self-center" id="credits">
+    by Sara Qu, Sahana Srinivasan, and Yijiang Zhao | December 6, 2021 | CS 171 Fall 2021 
+  </div>
+</div>
+
 <div class="container">
 
-    <div class="row">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="sara.html">Sara</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="sahana.html">Sahana</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="yijiang.html">Yijiang</a>
-                </li>
-                
-              </ul>
-             
-            </div>
-          </nav>
+  <!-- INTRO VIZ: SAHANA VISUALIZATION -->
+  <div class="row intro-blurb align-self-center">
+      First, we can explore general music trends over the decade by listening to each year's biggest hit and seeing how quantitative song metrics (e.g energy loudness). The absolute value
+      of these metrics isn't important but the relative trends are illuminating.
+  </div>
+  <div class = "row"  style="height: 110vh; width: 100%">
+    <div class = "col sahana-col" id = "attrs-over-time">
+      <div class="row yijiangRows d-flex justify-content-center"
+        style="height: 10vh; width: 100%; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
+        <div class="col align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+            <h1>Hits over Time</h1>
+        </div>
+        <div class="col-1 align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+          <button class="cool-button" id="play-button" >Play</button>
+        </div>
+        <div class="col-1 align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+          <button class="cool-button" id="song-button">Unmute</button>
+        </div>
     </div>
+      
+      
+        <div class="row" style="height: 10vh" id="slider-viz"></div>
+        <br></br>
 
-    This is the homepage.
+        <div class="row yijiangRows d-flex" style="height: 4vh" id ="top-song-display-div">
+            <div class="col-2"><h5>Year's top hit: </h5></div>
+            <div class="col-10 float-start" id="top-song-display"></div>
+        </div>
+        <br></br>
+            
+        <div id="song-viz" style="display: none">
+            <audio id="audio" controls="controls">
+              <source id="audioSource" src="" type="audio/mpeg"/>
+            </audio>
+          </div>
+        </div>
+        <div class="row" style="height: 13vh" id = "acousticness-over-time"></div>
+        <div class="row" style="height: 13vh" id = "energy-over-time"></div>
+        <div class="row" style="height: 13vh" id = "danceability-over-time"></div>
+        <div class="row" style="height: 13vh" id = "tempo-over-time"></div>
+        <div class="row" style="height: 13vh" id = "instrumentalness-over-time"></div>
+
+    </div>
+  
+  
+  <!-- YIJIANG VIZ -->
+
+  <div class="row intro-blurb align-self-center">
+    Now we can examine more directly what kinds of songs –– based on genre or our aforementioned quantitative music attribuets, like acousticness –– were popular when.
+  </div>
+
+  <div class = "row" id="yijiang-row">
+  <!-- HEADING -->
+  <div class="row yijiangRows d-flex justify-content-center"
+    style="height: 10vh; width: 100%; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
+  <div class="col align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+      <h1>What makes a hit?</h1>
+  </div>
+  </div>
+
+
+  <!--    justify-content-center -->
+  <div class="row yijiangRows selectDiv" id="catSelectDiv">
+  Sorting by the
+  <select id='categorySelector' class="custom-select selector"  onchange="categoryChange()">
+      <option value="1" selected>number of Top 1 hits</option>
+      <option value="10">number of Top 10 hits</option>
+      <option value="100">number of Top 100 hits</option>
+
+  </select>
+
+    over the years of
+  <div id="yearSlider"></div>
+  </div>
+
+  <!-- Visualizations -->
+  <div class="row justify-content-center align-items-center yijiangRows" style="height: 75vh">
+  <div class="col justify-content-center align-items-center row1cols">
+      <div class="justify-content-center align-self-center align-items-center" id="genreVis"></div>
+
+  </div>
+
+  <div class="col justify-content-center align-items-center row1cols">
+      <div class="justify-content-center align-self-center align-items-center" id="attrVis"></div>
+  </div>
+
+  </div>
+  <div class="row justify-content-center align-items-center yijiangRows" id="matrixDiv" style="height: 80vh" >
+  <h2>Exploring Relationship between Attributes</h2>
+  <p>
+      With the heatmap, we explore the joint distribution of two attributes of interest, and can see,
+      for the selected time period and types of hits, the count that have a specific value of each attribute.
+      This is especially helpful for identifying the most frequent style of music among the top hits.
+  </p>
+  <div class="row yijiangRows selectDiv" id="attributeSelectDiv">
+      Select the attributes
+      <select id='lMatrixSelector' class="custom-select align-self-center selector"  onchange="lMatrixChange()">
+          <option value="danceability" selected>danceability</option>
+          <option value="acousticness">acousticness</option>
+          <option value="energy">energy</option>
+          <option value="instrumentalness">instrumentalness</option>
+          <option value="liveness">liveness</option>
+          <option value="speechiness">speechiness</option>
+          <option value="valence">valence</option>
+      </select>
+      and
+      <select id='rMatrixSelector' class="custom-select align-self-center selector"  onchange="rMatrixChange()">
+          <option value="acousticness">acousticness</option>
+          <option value="danceability">danceability</option>
+          <option value="energy" selected>energy</option>
+          <option value="instrumentalness">instrumentalness</option>
+          <option value="liveness">liveness</option>
+          <option value="speechiness">speechiness</option>
+          <option value="valence">valence</option>
+      </select>
+  </div>
+
+  <div class="justify-content-center align-self-center align-items-center" id="matrixVis"></div>
+  <!--        <div class="justify-content-center align-self-center align-items-center matrixSelectDiv">-->
+  <!--            -->
+  <!--            -->
+  <!--        </div>-->
+  </div>
+</div>
+ 
+
+<div>
+  <!-- DETAILED ARTIST EXPLORATION: SARA VISUALIZATION -->
+
+  <div class="row intro-blurb align-self-center">
+    A big driver of what's popular in music, especially now, is who's popular. Who are the charts' biggest artists, and what are the ingredients in their hits?
+  </div>
+  
+  <div class = "row">
+    <div class="row yijiangRows d-flex justify-content-center"
+      style="height: 10vh; width: 100%; margin-top: 3vh; margin-bottom: 0.5vh; padding: 0;">
+    <div class="col align-self-center" style="margin-left: 0; margin-bottom: 0; padding-bottom: 0; padding-left: 0;">
+        <h1>Who makes the biggest hits?</h1>
+    </div>
+    </div>
+    <div class = "col sara-col">
+        <h5 id = "bar-chart-title"> Top 10 Artists in
+        <div id = "yearSlider"></div>
+        <div id = "bar-chart"></div>
+    </div>
+    <div class = "col sara-col">
+        <h5 id = "artist-profile">Artist Profile: <span id = "artist-profile-name"></span></h5>
+        <table class = "table" id = "top-hits" style="visibility:hidden">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">TITLE</th>
+                    <th scope="col">ALBUM</th>
+                </tr>
+            </thead>
+            <tbody id = "top-hits2"></tbody>
+        </table>
+        <div id="song-viz" style="display: none">
+            <audio id="audio" controls="controls">
+                <source id="audioSource" src="" type="audio/mpeg"/>
+            </audio>
+        </div>
+        <div id = "song-attributes" style = "height: 42%; visibility:hidden">
+            <h6>SONG: <span id = "song-selection">All</span></h6>
+        </div>
+    </div>
+  </div>
+
+</div>
 
 </div>
 
@@ -62,7 +221,21 @@
 
 
 <!-- Visualization objects -->
+<script src="js/sahanaTimelineVis.js"></script>
+<script src="js/sahanaSliderVis.js"></script>
+<script src="js/yijiangMatrixVis.js"></script>
+<script src="js/yijiangGenreVis.js"></script>
+<script src="js/yijiangAttrVis.js"></script>
+<script src="js/yearSlider.js"></script>
+<script src="js/saraBarChartVis.js"></script>
+<script src="js/artistProfileVis.js"></script>
+<script src="js/songAttributeVis.js"></script>
+
 
 <!-- Load data, create visualizations -->
+<script src="js/sahanaVis.js"></script>
+<script src="js/yijiangVis.js"></script>
+<script src="js/main.js"></script>
+
 </body>
 </html>

@@ -2,16 +2,16 @@
 dateFormatter = d3.timeFormat("%Y-%m-%d");
 dateParser = d3.timeParse("%m/%d/%Y");
 
-// color palette
-let colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
-              "#D9C3AD", "#BFB49D", "#A5A58D", "#6B705C",
-              "#3F4238", "#20211C"];
+// // color palette
+// let yijiang_colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
+//               "#D9C3AD", "#BFB49D", "#A5A58D", "#6B705C",
+//               "#3F4238", "#20211C"];
 
 let yijiangGenreViz, yijiangMatrixViz, yijiangAttrViz, yijiangYearSlider;
 
 // (1) Load data with promises
 
-let promises = [
+let yijiang_promises = [
     d3.csv("data/billboard.csv", row => {
         row["instance"] = +row["instance"];
         row["peak_position"] = +row["peak_position"];
@@ -41,15 +41,15 @@ let promises = [
     })
 ];
 
-Promise.all(promises)
+Promise.all(yijiang_promises)
     .then(function (data) {
-        createVis(data)
+        yijiang_createVis(data)
     })
     .catch(function (err) {
         console.log(err)
     });
 
-function createVis(data) {
+function yijiang_createVis(data) {
     let billboard = data[0]
     let audio = data[1]
 

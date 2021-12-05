@@ -198,6 +198,6 @@ class SahanaSliderVis {
         }
 
         vis.date = h;
-        vis.eventHandler.trigger("yearChanged", h);
+        vis.eventHandler.trigger("timelineYearChanged", h);
       }
 }
