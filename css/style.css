@@ -95,3 +95,11 @@ rect.selection {
     margin-top: 20vh;
     margin-bottom: 20vh;
 }
+.fa {
+    padding-top: 5%;
+    font-size: 28px;
+}
+
+td {
+    border-bottom: none !important;
+}

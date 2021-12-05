@@ -74,14 +74,12 @@ class SongAttributeVis {
                 // iterate through each attribute we need
                 vis.attrList.forEach(attr => {
                     let data = [0,0];
-                    let attrNum = 0;
                     attribute = attr;
                     if (vis.attributes.has(attr)) {
                         data = vis.attributes.get(attr);
                     }
                     if(!isNaN(vis.audio.get(songID)[attr])) {
                         data[0] += vis.audio.get(songID)[attr];
-                        if(attr == "energy") console.log(vis.audio.get(songID)[attr]);
                         data[1]++;
                     }
                     vis.attributes.set(attr, data);
@@ -120,7 +118,6 @@ class SongAttributeVis {
             .attr("rx", 6)
             .attr("width", vis.x.bandwidth())
             .attr("height", d => {
-                console.log(vis.y(d.avg))
                 if(isNaN(d.avg)) return vis.height - vis.y(0);
                 return vis.height - vis.y(d.avg)
             })
