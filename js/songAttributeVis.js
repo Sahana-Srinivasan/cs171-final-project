@@ -7,6 +7,10 @@ class SongAttributeVis {
         this.audio = _audio;
         this.displayData = [];
 
+        this.colors = ["#FFFFFF", "#FECBEC", "#FC96D9", "#FA57C1",
+            "#D65FC7", "#B166CC", "#936CE6", "#7572FF",
+            "#6F8CFC", "#69A6F9"];
+
         this.initVis();
     }
 
@@ -121,7 +125,7 @@ class SongAttributeVis {
                 if(isNaN(d.avg)) return vis.height - vis.y(0);
                 return vis.height - vis.y(d.avg)
             })
-            .attr("fill", "#936CE6");
+            .attr("fill", (d,i) => vis.colors[i+2]);
 
         rect.exit().remove();
 

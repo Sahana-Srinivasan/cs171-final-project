@@ -78,7 +78,7 @@ body {
 #main-title {
     font-size: 120px;
     margin-left: 10vw;
-    line-height: 120px;
+    line-height: 145px;
     background: -webkit-linear-gradient(#FA57C1, #6F8CFC);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -123,4 +123,9 @@ h1, h5, #top-song-display, text, th, .label{
 td {
     border-bottom: none !important;
     color: white;
+}
+
+#all {
+    margin-left: 10vw;
+    margin-right: 10vw;
 }

@@ -59,7 +59,7 @@ body {
 }
 
 #matrixDiv {
-    margin-top: 30vh;
+    margin-top: 20vh;
     align-content: center;
 }
 
@@ -88,7 +88,7 @@ body {
 
 rect.selection {
     stroke: none;
-    fill: #FECBEC;
+    fill: #69A6F9;
     fill-opacity: 0.6;
 }
 

@@ -21,7 +21,7 @@ class SahanaSliderVis {
         vis.endDate = d3.max(Object.keys(vis.weeklyDict), d => vis.parseDate(d));
         vis.date = vis.startDate;
 
-        vis.margin = {top:50, right:100, bottom:0, left:50},
+        vis.margin = {top:50, right:100, bottom:50, left:50},
             
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height  - vis.margin.top - vis.margin.bottom;

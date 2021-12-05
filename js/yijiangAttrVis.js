@@ -9,6 +9,10 @@ class YijiangAttrVis {
         this.selectedCategory = 1;
         this.yearRange = [1965, 2022];
 
+        this.colors = ["#FFFFFF", "#FECBEC", "#FC96D9", "#FA57C1",
+            "#D65FC7", "#B166CC", "#936CE6", "#7572FF",
+            "#6F8CFC", "#69A6F9"];
+
         this.initVis();
     }
 
@@ -116,7 +120,7 @@ class YijiangAttrVis {
             .merge(vis.bars)
             .transition()
             .duration(500)
-            .attr("fill", "#FECBEC")
+            .attr("fill", (d,i) => vis.colors[i])
             .attr("x", d => vis.x(d.attribute))
             .attr("y", d => vis.y(d.mean))
             .attr("width", vis.x.bandwidth())

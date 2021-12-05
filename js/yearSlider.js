@@ -122,7 +122,7 @@ class YearSlider {
             .attr("class", "handle--custom")
             .attr("r", vis.height/4)
             .attr("cy", vis.height *3/4)
-            .attr("fill", colors[3])
+            .attr("fill", colors[9])
             .attr("cursor", "ew-resize")
             // .attr("d", brushResizePath);
 

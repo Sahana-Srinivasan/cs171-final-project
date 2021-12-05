@@ -87,7 +87,8 @@ class YijiangMatrixVis {
             .attr("transform", `translate(${vis.width/2},${vis.height + 40})`);
 
         vis.yAxisGroup = vis.svg.append("g")
-            .attr("class", "y-axis axis");
+            .attr("class", "y-axis axis")
+            .attr("transform", `translate(-1,0)`)
 
 
         // color legend
