@@ -94,7 +94,7 @@ class SongAttributeVis {
             vis.displayData.push({attr, avg});
         })
 
-        console.log(vis.displayData);
+        //console.log(vis.displayData);
 
         vis.updateVis();
     }

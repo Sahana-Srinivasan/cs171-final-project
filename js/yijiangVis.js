@@ -107,7 +107,7 @@ function yijiang_createVis(data) {
     yijiangMatrixViz = new YijiangMatrixVis("matrixVis", topHits);
     yijiangAttrViz = new YijiangAttrVis("attrVis", topHits);
     console.log("hello")
-    yijiangYearSlider = new YearSlider("yearSlider", 1965, 2021, eventHandler);
+    yijiangYearSlider = new YearSlider("yijiang-yearSlider", 1965, 2021, eventHandler);
 
 
 

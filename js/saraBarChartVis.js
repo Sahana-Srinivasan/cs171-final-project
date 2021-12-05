@@ -140,6 +140,7 @@ class SaraBarChartVis {
         d3.selectAll(".tick text")
             .style("font-size", "1.25em")
             .on("mouseover", function(event, d) {
+                console.log("hi")
                 d3.select(this).style("cursor", "pointer");
                 d3.select(this).style("fill", "blue");
             })

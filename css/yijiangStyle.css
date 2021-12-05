@@ -74,6 +74,12 @@ body {
     font-size: 12px;
 }
 
+#yijiang-yearSlider {
+    margin-top: 0;
+    width: 400px;
+    height: 2.1em;
+}
+
 #yearSlider {
     margin-top: 0;
     width: 400px;
