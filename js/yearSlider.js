@@ -41,7 +41,7 @@ class YearSlider {
             .append('line')
             .attr('x1', d => vis.x(d)).attr('x2', d => vis.x(d))
             .attr('y1', 0).attr('y2', vis.height)
-            .style('stroke', '#ccc')
+            .style('stroke', 'white')
 
 
         // labels
@@ -50,12 +50,14 @@ class YearSlider {
             .attr("x", 0)
             .attr("y", vis.height + 5)
             .text(vis.range[0])
+            .attr("fill", "white")
 
         vis.labelR = vis.svg.append("text")
             .attr("id", "labelright")
             .attr("x", 0)
             .attr("y", vis.height + 5)
             .text(vis.range[1])
+            .attr("fill", "white")
 
         vis.wrangleData();
 
@@ -120,7 +122,7 @@ class YearSlider {
             .attr("class", "handle--custom")
             .attr("r", vis.height/4)
             .attr("cy", vis.height *3/4)
-            .attr("fill", colors[7])
+            .attr("fill", colors[3])
             .attr("cursor", "ew-resize")
             // .attr("d", brushResizePath);
 

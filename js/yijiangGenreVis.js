@@ -36,6 +36,7 @@ class YijiangGenreVis {
             .append('text')
             .attr('class', `bar-title-genre`)
             .text("TOP GENRES")
+            .attr("fill", "white")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
@@ -139,7 +140,7 @@ class YijiangGenreVis {
             .merge(vis.bars)
             .transition()
             .duration(500)
-            .attr("fill", (d,i) => colors[i])
+            .attr("fill", "#FECBEC")
             .attr("x", d => vis.x(d.genre))
             .attr("y", d => vis.y(d.count))
             .attr("width", vis.x.bandwidth())

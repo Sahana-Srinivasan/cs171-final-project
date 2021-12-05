@@ -39,6 +39,7 @@ class YijiangMatrixVis {
             .append('text')
             .attr('class', `matrix-title-categories`)
             .text("energy vs danceability")
+            .attr("fill", "white")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
@@ -71,6 +72,7 @@ class YijiangMatrixVis {
             .append("text")
             .attr("class", "x-axis-label-text")
             .text("danceability")
+            .attr("fill", "white")
             .style("text-anchor", "middle")
             .attr("transform", `translate(-40,${vis.height/2})rotate(-90)`);
 
@@ -80,6 +82,7 @@ class YijiangMatrixVis {
             .append("text")
             .attr("class", "y-axis-label-text")
             .text("energy")
+            .attr("fill", "white")
             .style("text-anchor", "middle")
             .attr("transform", `translate(${vis.width/2},${vis.height + 40})`);
 
@@ -93,7 +96,7 @@ class YijiangMatrixVis {
 
         vis.legendColor = d3.scaleLinear()
             .domain([0,100])
-            .range(["#ffffff", colors[7]]);
+            .range(["#000000", colors[4]]);
 
         vis.legendScale = d3.scaleLinear()
             .range([0,vis.height]);

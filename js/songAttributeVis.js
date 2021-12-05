@@ -121,7 +121,7 @@ class SongAttributeVis {
                 if(isNaN(d.avg)) return vis.height - vis.y(0);
                 return vis.height - vis.y(d.avg)
             })
-            .attr("fill", "#AD785C");
+            .attr("fill", "#936CE6");
 
         rect.exit().remove();
 
@@ -138,7 +138,7 @@ class SongAttributeVis {
             .attr("width", vis.x.bandwidth())
             .attr("height", vis.y(0))
             .attr("fill", "transparent")
-            .attr("stroke", "black");
+            .attr("stroke", "white");
 
 
         // Update the y-axis

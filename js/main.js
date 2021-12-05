@@ -5,9 +5,9 @@ let artistProfileName = document.getElementById("artist-profile-name");
 let topTenArtists = [];
 let topTenArtistsAudio;
 // color palette
-let colors = ["#7A533E", "#AD785C", "#CB997E", "#DDBEA9",
-    "#D9C3AD", "#BFB49D", "#A5A58D", "#6B705C",
-    "#3F4238", "#20211C"];
+let colors = ["#FFFFFF", "#FECBEC", "#FC96D9", "#FA57C1",
+    "#D65FC7", "#B166CC", "#936CE6", "#7572FF",
+    "#6F8CFC", "#69A6F9"];
 let artistProfile, attributeVis, saraBarChart, yearSlider;
 
 

@@ -30,7 +30,7 @@ class SaraBarChartVis {
 			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
         vis.colorScale = d3.scaleBand()
-            .range(vis.colors);
+            .range(colors);
 
         vis.x = d3.scaleLinear()
             .range([0, vis.width - 20]);
@@ -131,22 +131,22 @@ class SaraBarChartVis {
             .attr("rx", 6)
             .attr("width", d => vis.x(d.totalRank))
             .attr("height", vis.y.bandwidth())
-            .attr("fill", (d,i) => vis.colors[i]);
+            .attr("fill", "#FC96D9");
 
         rect.exit().remove();
 
         // Update the y-axis
         vis.svg.select(".y-axis").transition().duration(500).call(vis.yAxis);
-        d3.selectAll(".tick text")
+        vis.svg.selectAll(".tick text")
             .style("font-size", "1.25em")
             .on("mouseover", function(event, d) {
                 console.log("hi")
                 d3.select(this).style("cursor", "pointer");
-                d3.select(this).style("fill", "blue");
+                d3.select(this).style("fill", "#69A6F9");
             })
             .on("mouseout", function(event ,d) {
                 d3.select(this).style("cursor", "default");
-                d3.select(this).style("fill", "black");
+                d3.select(this).style("fill", "white");
             })
             .on("click", function(event, d) {
                 artistProfileName.innerHTML = d;

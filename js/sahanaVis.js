@@ -1,10 +1,10 @@
 
 let colors_dict = {
-    "acousticness": "#7A533E",
-    "danceability": "#CB997E",
-    "energy": "#DDBEA9",
-    "instrumentalness": "#A5A58D",
-    "tempo": "#3F4238"
+    "acousticness": "#FECBEC",
+    "danceability": "#FA57C1",
+    "energy": "#B166CC",
+    "instrumentalness": "#7572FF",
+    "tempo": "#69A6F9"
 }
 
 // Create a sleep function to time the way the lines/circles update

@@ -35,6 +35,7 @@ class YijiangAttrVis {
             .append('text')
             .attr('class', `bar-title-genre`)
             .text("Attribute Means")
+            .attr("fill", "white")
             .attr('transform', `translate(${vis.width / 2}, -20)`)
             .attr('text-anchor', 'middle');
 
@@ -115,7 +116,7 @@ class YijiangAttrVis {
             .merge(vis.bars)
             .transition()
             .duration(500)
-            .attr("fill", (d,i) => colors[i])
+            .attr("fill", "#FECBEC")
             .attr("x", d => vis.x(d.attribute))
             .attr("y", d => vis.y(d.mean))
             .attr("width", vis.x.bandwidth())

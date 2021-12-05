@@ -19,7 +19,7 @@ h5, #year {
 }
 
 .top-song-row:hover {
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(147,108,230,0.5);
     cursor: pointer;
 }
 
@@ -63,6 +63,13 @@ rect.selection {
     text-anchor: start;
 }
 
+/*GENERAL CSS FOR MAIN PAGE*/
+
+body {
+    background-color: black;
+    color: white !important;
+}
+
 #title-page {
     background-color: black;
     --bs-gutter-x: 0rem !important;
@@ -70,9 +77,11 @@ rect.selection {
 
 #main-title {
     font-size: 120px;
-    color: white;
     margin-left: 10vw;
     line-height: 120px;
+    background: -webkit-linear-gradient(#FA57C1, #6F8CFC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 #main-desc {
@@ -89,11 +98,22 @@ rect.selection {
 .intro-blurb {
     text-align: center;
     font-size: 28px;
+    color: white;
     margin-left: 10vw;
     margin-right: 10vw;
     line-height: 36px;
     margin-top: 20vh;
     margin-bottom: 20vh;
+    padding: 3% 3% 3% 3%;
+    outline: 3px white;
+    border-style: solid;
+    background: -webkit-linear-gradient(#FA57C1, #6F8CFC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h1, h5, #top-song-display, text, th, .label{
+    color: white;
 }
 .fa {
     padding-top: 5%;
@@ -102,4 +122,5 @@ rect.selection {
 
 td {
     border-bottom: none !important;
+    color: white;
 }

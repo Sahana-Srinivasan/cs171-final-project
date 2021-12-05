@@ -73,6 +73,7 @@ class SahanaSliderVis {
             .data(vis.x.ticks(10))
             .enter()
             .append("text")
+            .attr("fill", "white")
             .attr("x", vis.x)
             .attr("y", 10)
             .attr("text-anchor", "middle")
@@ -86,6 +87,7 @@ class SahanaSliderVis {
             .attr("class", "label")
             .attr("text-anchor", "middle")
             .text(vis.formatDate(vis.startDate))
+            .attr("fill", "white")
             .attr("transform", "translate(0," + (-25) + ")")
 
         vis.playButton

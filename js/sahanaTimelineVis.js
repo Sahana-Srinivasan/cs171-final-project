@@ -43,6 +43,7 @@ class SahanaTimelineVis {
         .attr("class", "y label")
         .attr("x", -vis.margin.left)
         .attr("y", vis.padding.top)
+            .attr("fill", "white")
         .text(vis.attr);
 
         // Initialize axis components
