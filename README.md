@@ -9,5 +9,5 @@ All our cleaned data is in the /data folder in our code submission.
 
 Link to website: [https://sahana-srinivasan.github.io/cs171-final-project/](https://sahana-srinivasan.github.io/cs171-final-project)
 
-Link to screencast video: 
+Link to screencast video: [https://drive.google.com/file/d/1hPkDz8jdoA9a9j_Y8W8fbamSApUFyQ_8/view?usp=sharing](https://drive.google.com/file/d/1hPkDz8jdoA9a9j_Y8W8fbamSApUFyQ_8/view?usp=sharing)
 
